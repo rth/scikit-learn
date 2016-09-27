@@ -34,6 +34,7 @@ from sklearn.utils.testing import assert_warns
 
 from sklearn.base import (clone, ClassifierMixin, RegressorMixin,
                           TransformerMixin, ClusterMixin, BaseEstimator)
+from sklearn.feature_extraction.text import VectorizerMixin
 from sklearn.metrics import accuracy_score, adjusted_rand_score, f1_score
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -198,8 +199,12 @@ def _yield_clustering_checks(name, Clusterer):
 
 
 def _yield_all_checks(name, Estimator):
-    for check in _yield_non_meta_checks(name, Estimator):
-        yield check
+    if issubclass(Estimator, VectorizerMixin):
+        pass
+    else:
+        for check in _yield_non_meta_checks(name, Estimator):
+            yield check
+
     if issubclass(Estimator, ClassifierMixin):
         for check in _yield_classifier_checks(name, Estimator):
             yield check
@@ -213,11 +218,12 @@ def _yield_all_checks(name, Estimator):
     if issubclass(Estimator, ClusterMixin):
         for check in _yield_clustering_checks(name, Estimator):
             yield check
-    yield check_fit2d_predict1d
-    yield check_fit2d_1sample
-    yield check_fit2d_1feature
-    yield check_fit1d_1feature
-    yield check_fit1d_1sample
+    if not issubclass(Estimator, VectorizerMixin):
+        yield check_fit2d_predict1d
+        yield check_fit2d_1sample
+        yield check_fit2d_1feature
+        yield check_fit1d_1feature
+        yield check_fit1d_1sample
 
 
 def check_estimator(Estimator):
@@ -1401,6 +1407,15 @@ def check_estimators_data_not_an_array(name, Estimator, X, y):
     assert_array_almost_equal(pred1, pred2, 2, name)
 
 
+def _is_numpy_dtype(x):
+    """ Check if x is a dtype """
+    # Not sure what is the best way of checking for numpy dtype
+    # https://stackoverflow.com/questions/26921836/correct-way-to-test-for-numpy-dtype
+    try:
+        return x == np.dtype(x)
+    except TypeError:
+        return False
+
 def check_parameters_default_constructible(name, Estimator):
     classifier = LinearDiscriminantAnalysis()
     # test default-constructibility
@@ -1448,9 +1463,14 @@ def check_parameters_default_constructible(name, Estimator):
             assert_not_equal(init_param.default, init_param.empty,
                              "parameter %s for %s has no default value"
                              % (init_param.name, type(estimator).__name__))
-            assert_in(type(init_param.default),
-                      [str, int, float, bool, tuple, type(None),
-                       np.float64, types.FunctionType, Memory])
+            try:
+                assert_in(type(init_param.default),
+                          [str, int, float, bool, tuple, type(None),
+                           np.float64, types.FunctionType, Memory])
+            except AssertionError:
+                if not _is_numpy_dtype(init_param.default):
+                    raise
+
             if init_param.name not in params.keys():
                 # deprecated parameter, not in get_params
                 assert_true(init_param.default is None)
