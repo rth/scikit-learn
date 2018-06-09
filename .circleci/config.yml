@@ -67,7 +67,7 @@ jobs:
 
   pypy3:
     docker:
-      - image: pypy:3-6.0.0
+      - image: pypy:3-5.10
     steps:
       - checkout
       - run: ./build_tools/circle/build_test_pypy.sh
@@ -93,8 +93,8 @@ workflows:
   version: 2
   build-doc-and-deploy:
     jobs:
-      - python3
-      - python2
+        #      - python3
+        # - python2
       - pypy3
       - deploy:
           requires:
