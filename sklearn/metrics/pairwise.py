@@ -296,6 +296,8 @@ def euclidean_distances(X, Y=None, Y_norm_squared=None, squared=False,
         XX_max = nanpercentile(XX, 95)**0.5
         YY_min = nanpercentile(YY, 5)**0.5
         YY_max = nanpercentile(YY, 95)**0.5
+        XY_min = min(XX_min, YY_min)
+        XY_max = max(XX_max, YY_max)
 
         # only float64, float32 dtypes are possible
         if X.dtype == np.float64:
@@ -303,16 +305,22 @@ def euclidean_distances(X, Y=None, Y_norm_squared=None, squared=False,
         elif X.dtype == np.float32:
             threshold = 1e-3
 
-        if (abs(XX_max - YY_min) < threshold*XX_max and
-                abs(YY_max - XX_min) < threshold*YY_max and
-                XX_max > 0.0):
+        if (abs(XY_max - XY_min) < threshold*XY_max and
+                # ignore null vector
+                XX_max > 0.0 and YY_max > 0
+                # ignore comparison between the vector and itself
+                and XX_max != YY_max):
+
+            # we are potentially in a problematic case, perform a more detailed
+            # evaluation with inertia
+
             warning_message = (
                     "with the provided data, computing "
                     "Euclidean distances with the quadratic expansion may "
-                    "lead to numerically inaccurate results.")
+                    "lead to numerically inaccurate results. ")
             if not issparse(X):
                 warning_message += (
-                    "\nConsider standardizing features by removing the mean, "
+                    "Consider standardizing features by removing the mean, "
                     "or setting globally "
                     "euclidean_distances_algorithm='exact' for slower but "
                     "more precise implementation.")
