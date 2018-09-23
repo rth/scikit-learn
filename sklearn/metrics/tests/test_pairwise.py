@@ -5,6 +5,7 @@ from numpy import linalg
 
 from scipy.sparse import dok_matrix, csr_matrix, issparse
 from scipy.spatial.distance import cosine, cityblock, minkowski, wminkowski
+from scipy.spatial.distance import cdist
 
 import pytest
 
@@ -50,8 +51,7 @@ from sklearn.metrics.pairwise import paired_euclidean_distances
 from sklearn.metrics.pairwise import paired_manhattan_distances
 from sklearn.preprocessing import normalize
 from sklearn.exceptions import DataConversionWarning
-
-import pytest
+from sklearn.exceptions import NumericalPrecisionWarning
 
 
 def test_pairwise_distances():
@@ -878,8 +878,30 @@ def test_check_preserve_type():
 
 
 @pytest.mark.parametrize('dtype', ('float32', 'float64'))
-def test_euclidean_distance_numerical_precision(dtype):
-    """dot(x,x) - 2 dot(x,y) + dot(y,y) has catastrophic precision"""
+def test_euclidean_distance_algorithm(dtype):
+    XA = np.random.RandomState(42).rand(100, 10).astype(dtype)
+    XB = np.random.RandomState(41).rand(200, 10).astype(dtype)
+
+    dist_exact = euclidean_distances(XA, XB, algorithm='exact')
+    assert_allclose(dist_exact, cdist(XA, XB, 'euclidean'))
+
+    dist_exact_squared = euclidean_distances(XA, XB, algorithm='exact',
+                                             squared=True)
+
+    assert_allclose(dist_exact_squared, dist_exact**2)
+
+    dist_approx = euclidean_distances(XA, XB, algorithm='quadratic-expansion')
+    assert_allclose(dist_exact, dist_approx, rtol=1e-5)
+
+    with pytest.raises(ValueError,
+                       match="algorithm='exact' does not support sparse data"):
+        euclidean_distances(csr_matrix(XA), csr_matrix(XB), algorithm='exact')
+
+
+@pytest.mark.parametrize('dtype', ('float32', 'float64'))
+def test_euclidean_distance_precision(dtype):
+    """Checks for the most problematic cases when computing the
+    the euclidean distance with dot(x,x) - 2 dot(x,y) + dot(y,y)"""
     if dtype == 'float32':
         offset = 10000
     else:
@@ -888,14 +910,42 @@ def test_euclidean_distance_numerical_precision(dtype):
     XA = np.array([[offset]], dtype)
     XB = np.array([[offset + 1]], dtype)
 
-    with pytest.raises(AssertionError):
-        assert euclidean_distances(XA, XB)[0, 0] == 1.
+    with pytest.warns(NumericalPrecisionWarning):
+        with pytest.raises(AssertionError):
+            assert euclidean_distances(XA, XB)[0, 0] == 1.
 
-    with pytest.raises(AssertionError):
-        assert pairwise_distances(XA, XB)[0, 0] == 1.
+    with pytest.warns(NumericalPrecisionWarning):
+        with pytest.raises(AssertionError):
+            assert pairwise_distances(XA, XB)[0, 0] == 1.
 
-    assert euclidean_distances(XA, XB, algorithm='exact')[0, 0] == 1
+    with pytest.warns(None) as record:
+        assert euclidean_distances(XA, XB, algorithm='exact')[0, 0] == 1
 
-    with sklearn.config_context(euclidean_distances_algorithm='exact'):
-        assert euclidean_distances(XA, XB)[0, 0] == 1
-        pairwise_distances(XA, XB)[0, 0] == 1.
+        with sklearn.config_context(euclidean_distances_algorithm='exact'):
+            assert euclidean_distances(XA, XB)[0, 0] == 1
+            assert pairwise_distances(XA, XB)[0, 0] == 1.
+    assert len(record) == 0
+
+
+@pytest.mark.parametrize('dtype', ('float32', 'float64'))
+def test_euclidean_distance_distribution_precision(dtype):
+    """Computing euclidean_distances with the quadratic expansion
+    on data strongly shifted off the origin leads to numerical precision
+    issues"""
+    XA = np.random.RandomState(42).randn(100, 10).astype(dtype)
+    XB = np.random.RandomState(41).randn(200, 10).astype(dtype)
+
+    if dtype == 'float32':
+        offset = 10000
+    else:
+        offset = 1e8
+
+    with pytest.warns(None) as record:
+        euclidean_distances(XA, XB)
+    assert len(record) == 0
+
+    XA += offset
+    XB += offset
+
+    with pytest.warns(NumericalPrecisionWarning):
+        euclidean_distances(XA, XB)

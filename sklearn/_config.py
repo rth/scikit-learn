@@ -38,6 +38,15 @@ def set_config(assume_finite=None, working_memory=None,
         to this number of MiB (per job when parallelised), often saving both
         computation time and memory on expensive operations that can be
         performed in chunks. Global default: 1024.
+
+    euclidean_distances_algorithm : {str, None}, default: None
+        Method of computing the euclidean distances: "exact" uses
+        ``scipy.spatial.distance.cdist`` while "quadratic-expansion" uses
+        a faster but less precise quadratic expansion. For sparse data, only
+        "quadratic-expansion" is supported.
+        Global default: "quadratic-expansion"
+
+        .. versionadded:: 0.20
     """
     if assume_finite is not None:
         _global_config['assume_finite'] = assume_finite
@@ -65,6 +74,15 @@ def config_context(**new_config):
         to this number of MiB (per job when parallelised), often saving both
         computation time and memory on expensive operations that can be
         performed in chunks. Global default: 1024.
+
+    euclidean_distances_algorithm : {str, None}, default: None
+        Method of computing the euclidean distances: "exact" uses
+        ``scipy.spatial.distance.cdist`` while "quadratic-expansion" uses
+        a faster but less precise quadratic expansion. For sparse data, only
+        "quadratic-expansion" is supported.
+        Global default: "quadratic-expansion"
+
+        .. versionadded:: 0.20
 
     Notes
     -----
