@@ -5,7 +5,8 @@ from contextlib import contextmanager as contextmanager
 
 _global_config = {
     'assume_finite': bool(os.environ.get('SKLEARN_ASSUME_FINITE', False)),
-    'working_memory': int(os.environ.get('SKLEARN_WORKING_MEMORY', 1024))
+    'working_memory': int(os.environ.get('SKLEARN_WORKING_MEMORY', 1024)),
+    'euclidean_distances_algorithm': 'quadratic-expansion'
 }
 
 
@@ -20,7 +21,8 @@ def get_config():
     return _global_config.copy()
 
 
-def set_config(assume_finite=None, working_memory=None):
+def set_config(assume_finite=None, working_memory=None,
+               euclidean_distances_algorithm=None):
     """Set global scikit-learn configuration
 
     Parameters
@@ -41,6 +43,9 @@ def set_config(assume_finite=None, working_memory=None):
         _global_config['assume_finite'] = assume_finite
     if working_memory is not None:
         _global_config['working_memory'] = working_memory
+    if euclidean_distances_algorithm is not None:
+        _global_config['euclidean_distances_algorithm'] = (
+                euclidean_distances_algorithm)
 
 
 @contextmanager

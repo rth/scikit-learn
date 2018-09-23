@@ -27,6 +27,7 @@ from ..preprocessing import normalize
 from ..utils import Parallel
 from ..utils import delayed
 from ..utils import effective_n_jobs
+from ..utils import get_config
 
 from .pairwise_fast import _chi2_kernel_fast, _sparse_manhattan
 
@@ -162,7 +163,7 @@ def check_paired_arrays(X, Y):
 
 # Pairwise distances
 def euclidean_distances(X, Y=None, Y_norm_squared=None, squared=False,
-                        X_norm_squared=None):
+                        X_norm_squared=None, algorithm=None):
     """
     Considering the rows of X (and Y=X) as vectors, compute the
     distance matrix between each pair of vectors.
@@ -222,6 +223,17 @@ def euclidean_distances(X, Y=None, Y_norm_squared=None, squared=False,
     paired_distances : distances betweens pairs of elements of X and Y.
     """
     X, Y = check_pairwise_arrays(X, Y)
+
+    if algorithm is None:
+        algorithm = get_config()['euclidean_distances_algorithm']
+
+    if algorithm not in ['exact', 'quadratic-expansion']:
+        raise ValueError('algorithm=%s invalid, must be one of '
+                         '"exact", "quadratic-expansion"' % algorithm)
+
+    if algorithm == 'exact':
+        metric = 'sqeuclidean' if squared else 'euclidean'
+        return distance.cdist(X, Y, metric)
 
     if X_norm_squared is not None:
         XX = check_array(X_norm_squared)
