@@ -932,7 +932,7 @@ def gini_coefficient_score(y_true, y_score, sample_weight=None):
     >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
     >>> gini_coefficient_score(y_true, y_scores)
-    0.13005050505050508
+    0.19823232323232332
 
     """
     cumulative_observations, cumulative_responses = \
@@ -984,7 +984,7 @@ def normalized_gini_coefficient_score(y_true, y_score, sample_weight=None):
     >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
     >>> normalized_gini_coefficient_score(y_true, y_scores)
-    0.9115044247787609
+    0.9401197604790423
 
     """
     gini_index = gini_coefficient_score(y_true, y_score,
@@ -1056,8 +1056,8 @@ def lorenz_curve(y_true, y_score, sample_weight=None, normalized=False):
         weights = sample_weight[desc_score_indices]
     else:
         weights = 1. * np.ones_like(y_true)
-    cumulative_observations = np.cumsum(weights)
-    cumulative_responses = np.cumsum(y_true)
+    cumulative_observations = np.r_[0, np.cumsum(weights)]
+    cumulative_responses = np.r_[0, np.cumsum(y_true)]
 
     if normalized is True:
         cumulative_observations = 1.0 * cumulative_observations / cumulative_observations[-1]
