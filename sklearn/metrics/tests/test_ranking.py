@@ -29,6 +29,9 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import label_ranking_loss
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
+from sklearn.metrics import lorentz_curve
+from sklearn.metrics import gini_coefficient_score
+from sklearn.metrics import normalized_gini_coefficient_score
 
 from sklearn.exceptions import UndefinedMetricWarning
 
@@ -1119,3 +1122,15 @@ def test_partial_roc_auc_score():
         assert_almost_equal(
             roc_auc_score(y_true, y_pred, max_fpr=max_fpr),
             _partial_roc_auc_score(y_true, y_pred, max_fpr))
+
+
+def test_lorentz_curve():
+    pass
+
+
+def test_gini_coefficient_score():
+    pass
+
+
+def test_normalized_gini_coefficient_score():
+    pass

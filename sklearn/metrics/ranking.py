@@ -889,3 +889,178 @@ def label_ranking_loss(y_true, y_score, sample_weight=None):
     loss[np.logical_or(n_positives == 0, n_positives == n_labels)] = 0.
 
     return np.average(loss, weights=sample_weight)
+
+
+def gini_coefficient_score(y_true, y_score, sample_weight=None):
+    """Compute the Gini coefficient from prediction scores.
+
+    Note: Should not be confused with Gini Impurity
+
+    Parameters
+    ----------
+    y_true : array, shape = [n_samples]
+        True responses.
+
+    y_score : array, shape = [n_samples]
+        Target (ranking) scores.
+
+    sample_weight : array-like of shape = [n_samples], optional
+        Sample weights.
+
+    Returns
+    -------
+    gini_coefficient : float
+        Gini coefficient. Corresponds to the area between the the diagonal and
+        the Lorentz curve
+
+    References
+    ----------
+    .. [1] `Wikipedia entry for the Gini Coefficient
+            <https://en.wikipedia.org/wiki/Gini_coefficient>`_
+
+    See also
+    --------
+
+    lorentz_curve : Compute Lorentz curve
+
+    normalized_gini_coefficient_score: Normalized Gini coefficient
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from sklearn.metrics import gini_coefficient_score
+    >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
+    >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
+    >>> gini_coefficient_score(y_true, y_scores)
+    0.13005050505050508
+
+    """
+    cumulative_observations, cumulative_responses = \
+        lorentz_curve(y_true, y_score, sample_weight=sample_weight,
+                      normalized=True)
+    gini_coefficient = auc(cumulative_observations, cumulative_responses) - 0.5
+    return gini_coefficient
+
+
+def normalized_gini_coefficient_score(y_true, y_score, sample_weight=None):
+    """Compute the normalized Gini coefficient from
+    prediction scores.
+
+    Note: Should not be confused with Gini Impurity
+
+    Parameters
+    ----------
+    y_true : array, shape = [n_samples]
+        True responses.
+
+    y_score : array, shape = [n_samples]
+        Target (ranking) scores.
+
+    sample_weight : array-like of shape = [n_samples], optional
+        Sample weights.
+
+    Returns
+    -------
+    normalized_gini : float
+        Normalized Gini coefficient. Corresponds to the area between the the
+        diagonal and the Lorentz curve
+
+    References
+    ----------
+    .. [1] `Wikipedia entry for the Gini Coefficient
+            <https://en.wikipedia.org/wiki/Gini_coefficient>`_
+
+    See also
+    --------
+
+    lorentz_curve : Compute Lorentz curve
+
+    gini_coefficient_score: Normalized Gini coefficient
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from sklearn.metrics import normalized_gini_coefficient_score
+    >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
+    >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
+    >>> normalized_gini_coefficient_score(y_true, y_scores)
+    0.9115044247787609
+
+    """
+    gini_index = gini_coefficient_score(y_true, y_score,
+                                        sample_weight=sample_weight)
+    optimal_gini_index = gini_coefficient_score(y_true, y_true,
+                                                sample_weight=sample_weight)
+    normalized_gini = gini_index / optimal_gini_index
+
+    return normalized_gini
+
+
+def lorentz_curve(y_true, y_score, sample_weight=None, normalized=False):
+    """Compute the Lorentz curve from prediction scores.
+    Lorentz curve generalizes the ROC curve for regression.
+
+    Parameters
+    ----------
+    y_true : array, shape = [n_samples]
+        True responses.
+
+    y_score : array, shape = [n_samples]
+        Target (ranking) scores.
+
+    sample_weight : array-like of shape = [n_samples], optional
+        Sample weights.
+
+    normalized : bool, optional
+        Whether or not the the Lorentz curve is normalized
+
+    Returns
+    -------
+    cumulative_observations : array, shape = [>2]
+        Increasing false positive rates such that element i is the false
+        positive rate of predictions with score >= thresholds[i].
+
+    cumulative_responses : array, shape = [>2]
+        Increasing true positive rates such that element i is the true
+        positive rate of predictions with score >= thresholds[i].
+
+    References
+    ----------
+    .. [1] `Wikipedia entry for the Lorentz Curve
+            <https://en.wikipedia.org/wiki/Lorenz_curve>`_
+
+    See also
+    --------
+
+    roc_curve : Compute Receiver operating characteristic (ROC) curve
+
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from sklearn.metrics import lorentz_curve
+    >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
+    >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
+    >>> lorentz_curve(y_true, y_scores)
+    (array([1., 2., 3., 4.]), array([5.4, 7.4, 9.9, 9.9]))
+
+
+    """
+    if np.any(y_true < 0):
+        raise ValueError("True responses should be non negative.")
+    if np.sum(y_true) == 0:
+        raise ValueError("At least one true response should be non zero")
+    desc_score_indices = np.argsort(y_score, kind="mergesort")[::-1]
+    y_true = y_true[desc_score_indices]
+    if sample_weight is not None:
+        weights = sample_weight[desc_score_indices]
+    else:
+        weights = 1. * np.ones_like(y_true)
+    cumulative_observations = np.cumsum(weights)
+    cumulative_responses = np.cumsum(y_true)
+
+    if normalized is True:
+        cumulative_observations = 1.0 * cumulative_observations / cumulative_observations[-1]
+        cumulative_responses = 1.0 * cumulative_responses / cumulative_responses[-1]
+
+    return cumulative_observations, cumulative_responses
