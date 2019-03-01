@@ -29,7 +29,7 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import label_ranking_loss
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
-from sklearn.metrics import lorentz_curve
+from sklearn.metrics import lorenz_curve
 from sklearn.metrics import gini_coefficient_score
 from sklearn.metrics import normalized_gini_coefficient_score
 
@@ -1124,7 +1124,7 @@ def test_partial_roc_auc_score():
             _partial_roc_auc_score(y_true, y_pred, max_fpr))
 
 
-def test_lorentz_curve():
+def test_lorenz_curve():
     pass
 
 

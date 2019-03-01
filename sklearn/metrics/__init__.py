@@ -14,7 +14,7 @@ from .ranking import roc_auc_score
 from .ranking import roc_curve
 from .ranking import gini_coefficient_score
 from .ranking import normalized_gini_coefficient_score
-from .ranking import lorentz_curve
+from .ranking import lorenz_curve
 
 from .classification import accuracy_score
 from .classification import balanced_accuracy_score

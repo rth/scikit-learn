@@ -911,7 +911,7 @@ def gini_coefficient_score(y_true, y_score, sample_weight=None):
     -------
     gini_coefficient : float
         Gini coefficient. Corresponds to the area between the the diagonal and
-        the Lorentz curve
+        the Lorenz curve
 
     References
     ----------
@@ -921,7 +921,7 @@ def gini_coefficient_score(y_true, y_score, sample_weight=None):
     See also
     --------
 
-    lorentz_curve : Compute Lorentz curve
+    lorenz_curve : Compute Lorenz curve
 
     normalized_gini_coefficient_score: Normalized Gini coefficient
 
@@ -936,7 +936,7 @@ def gini_coefficient_score(y_true, y_score, sample_weight=None):
 
     """
     cumulative_observations, cumulative_responses = \
-        lorentz_curve(y_true, y_score, sample_weight=sample_weight,
+        lorenz_curve(y_true, y_score, sample_weight=sample_weight,
                       normalized=True)
     gini_coefficient = auc(cumulative_observations, cumulative_responses) - 0.5
     return gini_coefficient
@@ -963,7 +963,7 @@ def normalized_gini_coefficient_score(y_true, y_score, sample_weight=None):
     -------
     normalized_gini : float
         Normalized Gini coefficient. Corresponds to the area between the the
-        diagonal and the Lorentz curve
+        diagonal and the Lorenz curve
 
     References
     ----------
@@ -973,7 +973,7 @@ def normalized_gini_coefficient_score(y_true, y_score, sample_weight=None):
     See also
     --------
 
-    lorentz_curve : Compute Lorentz curve
+    lorenz_curve : Compute Lorenz curve
 
     gini_coefficient_score: Normalized Gini coefficient
 
@@ -996,9 +996,9 @@ def normalized_gini_coefficient_score(y_true, y_score, sample_weight=None):
     return normalized_gini
 
 
-def lorentz_curve(y_true, y_score, sample_weight=None, normalized=False):
-    """Compute the Lorentz curve from prediction scores.
-    Lorentz curve generalizes the ROC curve for regression.
+def lorenz_curve(y_true, y_score, sample_weight=None, normalized=False):
+    """Compute the Lorenz curve from prediction scores.
+    Lorenz curve generalizes the ROC curve for regression.
 
     Parameters
     ----------
@@ -1012,7 +1012,7 @@ def lorentz_curve(y_true, y_score, sample_weight=None, normalized=False):
         Sample weights.
 
     normalized : bool, optional
-        Whether or not the the Lorentz curve is normalized
+        Whether or not the the Lorenz curve is normalized
 
     Returns
     -------
@@ -1026,7 +1026,7 @@ def lorentz_curve(y_true, y_score, sample_weight=None, normalized=False):
 
     References
     ----------
-    .. [1] `Wikipedia entry for the Lorentz Curve
+    .. [1] `Wikipedia entry for the Lorenz Curve
             <https://en.wikipedia.org/wiki/Lorenz_curve>`_
 
     See also
@@ -1038,10 +1038,10 @@ def lorentz_curve(y_true, y_score, sample_weight=None, normalized=False):
     Examples
     --------
     >>> import numpy as np
-    >>> from sklearn.metrics import lorentz_curve
+    >>> from sklearn.metrics import lorenz_curve
     >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
-    >>> lorentz_curve(y_true, y_scores)
+    >>> lorenz_curve(y_true, y_scores)
     (array([1., 2., 3., 4.]), array([5.4, 7.4, 9.9, 9.9]))
 
 
