@@ -554,8 +554,9 @@ class ARDRegression(LinearModel, RegressorMixin):
         def update_sigma(X, alpha_, lambda_, keep_lambda, n_samples):
             sigma_ = pinvh(np.eye(n_samples) / alpha_ +
                            np.dot(X[:, keep_lambda] *
-                           np.reshape(1. / lambda_[keep_lambda], [1, -1]),
-                           X[:, keep_lambda].T))
+                                  np.reshape(
+                                      1. / lambda_[keep_lambda], [1, -1]),
+                                  X[:, keep_lambda].T))
             sigma_ = np.dot(sigma_, X[:, keep_lambda] *
                             np.reshape(1. / lambda_[keep_lambda], [1, -1]))
             sigma_ = - np.dot(np.reshape(1. / lambda_[keep_lambda], [-1, 1]) *

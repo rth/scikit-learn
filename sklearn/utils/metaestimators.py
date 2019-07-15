@@ -88,6 +88,7 @@ class _IffHasAttrDescriptor:
     See https://docs.python.org/3/howto/descriptor.html for an explanation of
     descriptors.
     """
+
     def __init__(self, fn, delegate_names, attribute_name):
         self.fn = fn
         self.delegate_names = delegate_names

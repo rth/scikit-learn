@@ -353,7 +353,7 @@ def test_compare_covar_type():
                             bgmm.degrees_of_freedom_[:, np.newaxis])
         assert_almost_equal(diag_covariances,
                             np.array([np.diag(cov)
-                                     for cov in full_covariances]))
+                                      for cov in full_covariances]))
 
         # Check spherical_covariance = np.mean(diag_covariances, 0)
         bgmm = BayesianGaussianMixture(

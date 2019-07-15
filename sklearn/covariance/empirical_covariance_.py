@@ -132,6 +132,7 @@ class EmpiricalCovariance(BaseEstimator):
     array([0.0622..., 0.0193...])
 
     """
+
     def __init__(self, store_precision=True, assume_centered=False):
         self.store_precision = store_precision
         self.assume_centered = assume_centered

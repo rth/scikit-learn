@@ -237,7 +237,7 @@ class VectorizerMixin:
         # number of functions. However the cost of a lambda call is a few
         # hundreds of nanoseconds which is negligible when compared to the
         # cost of tokenizing a string of 1000 chars for instance.
-        noop = lambda x: x
+        def noop(x): return x
 
         # accent stripping
         if not self.strip_accents:
@@ -565,6 +565,7 @@ class HashingVectorizer(BaseEstimator, VectorizerMixin, TransformerMixin):
     CountVectorizer, TfidfVectorizer
 
     """
+
     def __init__(self, input='content', encoding='utf-8',
                  decode_error='strict', strip_accents=None,
                  lowercase=True, preprocessor=None, tokenizer=None,

@@ -616,6 +616,7 @@ class OrthogonalMatchingPursuit(LinearModel, RegressorMixin, MultiOutputMixin):
     decomposition.sparse_encode
     OrthogonalMatchingPursuitCV
     """
+
     def __init__(self, n_nonzero_coefs=None, tol=None, fit_intercept=True,
                  normalize=True, precompute='auto'):
         self.n_nonzero_coefs = n_nonzero_coefs
@@ -853,6 +854,7 @@ class OrthogonalMatchingPursuitCV(LinearModel, RegressorMixin):
     decomposition.sparse_encode
 
     """
+
     def __init__(self, copy=True, fit_intercept=True, normalize=True,
                  max_iter=None, cv=None, n_jobs=None, verbose=False):
         self.copy = copy

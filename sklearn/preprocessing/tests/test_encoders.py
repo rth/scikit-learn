@@ -551,6 +551,7 @@ def test_ordinal_encoder_raise_categories_shape():
     with pytest.raises(ValueError, match=msg):
         enc.fit(X)
 
+
 def test_encoder_dtypes():
     # check that dtypes are preserved when determining categories
     enc = OneHotEncoder(categories='auto')
@@ -624,15 +625,15 @@ def test_one_hot_encoder_drop_manual():
 @pytest.mark.parametrize(
     "X_fit, params, err_msg",
     [([["Male"], ["Female"]], {'drop': 'second'},
-     "Wrong input for parameter `drop`"),
+      "Wrong input for parameter `drop`"),
      ([["Male"], ["Female"]], {'drop': 'first', 'handle_unknown': 'ignore'},
-     "`handle_unknown` must be 'error'"),
+      "`handle_unknown` must be 'error'"),
      ([['abc', 2, 55], ['def', 1, 55], ['def', 3, 59]],
       {'drop': np.asarray('b', dtype=object)},
-     "Wrong input for parameter `drop`"),
+      "Wrong input for parameter `drop`"),
      ([['abc', 2, 55], ['def', 1, 55], ['def', 3, 59]],
       {'drop': ['ghi', 3, 59]},
-     "The following categories were supposed")]
+      "The following categories were supposed")]
 )
 def test_one_hot_encoder_invalid_params(X_fit, params, err_msg):
     enc = OneHotEncoder(**params)

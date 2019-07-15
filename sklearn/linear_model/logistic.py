@@ -217,7 +217,7 @@ def _logistic_grad_hess(w, X, y, alpha, sample_weight=None):
     d = sample_weight * z * (1 - z)
     if sparse.issparse(X):
         dX = safe_sparse_dot(sparse.dia_matrix((d, 0),
-                             shape=(n_samples, n_samples)), X)
+                                               shape=(n_samples, n_samples)), X)
     else:
         # Precompute as much as possible
         dX = d[:, np.newaxis] * X
@@ -1489,8 +1489,8 @@ class LogisticRegression(BaseEstimator, LinearClassifierMixin,
         if self.penalty == 'elasticnet':
             if (not isinstance(self.l1_ratio, numbers.Number) or
                     self.l1_ratio < 0 or self.l1_ratio > 1):
-                        raise ValueError("l1_ratio must be between 0 and 1;"
-                                         " got (l1_ratio=%r)" % self.l1_ratio)
+                raise ValueError("l1_ratio must be between 0 and 1;"
+                                 " got (l1_ratio=%r)" % self.l1_ratio)
         elif self.l1_ratio is not None:
             warnings.warn("l1_ratio parameter is only used when penalty is "
                           "'elasticnet'. Got "
@@ -1914,6 +1914,7 @@ class LogisticRegressionCV(LogisticRegression, BaseEstimator,
     LogisticRegression
 
     """
+
     def __init__(self, Cs=10, fit_intercept=True, cv=None, dual=False,
                  penalty='l2', scoring=None, solver='lbfgs', tol=1e-4,
                  max_iter=100, class_weight=None, n_jobs=None, verbose=0,

@@ -117,7 +117,7 @@ def test_np_matrix():
 def test_memmap():
     # Confirm that input validation code doesn't copy memory mapped arrays
 
-    asflt = lambda x: as_float_array(x, copy=False)
+    def asflt(x): return as_float_array(x, copy=False)
 
     with NamedTemporaryFile(prefix='sklearn-test') as tmp:
         M = np.memmap(tmp, shape=(10, 10), dtype=np.float32)
@@ -333,7 +333,7 @@ def test_check_array_on_mock_dataframe():
     mock_df = MockDataFrame(arr)
     checked_arr = check_array(mock_df)
     assert (checked_arr.dtype ==
-                 arr.dtype)
+            arr.dtype)
     checked_arr = check_array(mock_df, dtype=np.float32)
     assert checked_arr.dtype == np.dtype(np.float32)
 

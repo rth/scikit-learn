@@ -476,7 +476,7 @@ def _fit_and_score(estimator, X, y, scorer, train, test, verbose,
             msg = ''
         else:
             msg = '%s' % (', '.join('%s=%s' % (k, v)
-                          for k, v in parameters.items()))
+                                    for k, v in parameters.items()))
         print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
 
     # Adjust length of sample weights
@@ -510,10 +510,10 @@ def _fit_and_score(estimator, X, y, scorer, train, test, verbose,
         elif isinstance(error_score, numbers.Number):
             if is_multimetric:
                 test_scores = dict(zip(scorer.keys(),
-                                   [error_score, ] * n_scorers))
+                                       [error_score, ] * n_scorers))
                 if return_train_score:
                     train_scores = dict(zip(scorer.keys(),
-                                        [error_score, ] * n_scorers))
+                                            [error_score, ] * n_scorers))
             else:
                 test_scores = error_score
                 if return_train_score:

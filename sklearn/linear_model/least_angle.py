@@ -1705,6 +1705,7 @@ class LassoLarsIC(LassoLars):
     --------
     lars_path, LassoLars, LassoLarsCV
     """
+
     def __init__(self, criterion='aic', fit_intercept=True, verbose=False,
                  normalize=True, precompute='auto', max_iter=500,
                  eps=np.finfo(np.float).eps, copy_X=True, positive=False):

@@ -123,6 +123,7 @@ class ShrunkCovariance(EmpiricalCovariance):
     where mu = trace(cov) / n_features
 
     """
+
     def __init__(self, store_precision=True, assume_centered=False,
                  shrinkage=0.1):
         super().__init__(store_precision=store_precision,
@@ -398,6 +399,7 @@ class LedoitWolf(EmpiricalCovariance):
     February 2004, pages 365-411.
 
     """
+
     def __init__(self, store_precision=True, assume_centered=False,
                  block_size=1000):
         super().__init__(store_precision=store_precision,

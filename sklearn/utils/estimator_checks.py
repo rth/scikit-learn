@@ -1976,7 +1976,7 @@ def check_class_weight_balanced_classifiers(name, classifier_orig, X_train,
     classifier.fit(X_train, y_train)
     y_pred_balanced = classifier.predict(X_test)
     assert (f1_score(y_test, y_pred_balanced, average='weighted') >
-                   f1_score(y_test, y_pred, average='weighted'))
+            f1_score(y_test, y_pred, average='weighted'))
 
 
 @ignore_warnings(category=(DeprecationWarning, FutureWarning))
@@ -2214,8 +2214,8 @@ def check_parameters_default_constructible(name, Estimator):
                 assert init_param.default in [np.float64, np.int64]
             else:
                 assert (type(init_param.default) in
-                          [str, int, float, bool, tuple, type(None),
-                           np.float64, types.FunctionType, joblib.Memory])
+                        [str, int, float, bool, tuple, type(None),
+                         np.float64, types.FunctionType, joblib.Memory])
             if init_param.name not in params.keys():
                 # deprecated parameter, not in get_params
                 assert init_param.default is None
@@ -2360,7 +2360,7 @@ def check_set_params(name, estimator_orig):
                 curr_params = estimator.get_params(deep=False)
                 try:
                     assert (set(params_before_exception.keys()) ==
-                                 set(curr_params.keys()))
+                            set(curr_params.keys()))
                     for k, v in curr_params.items():
                         assert params_before_exception[k] is v
                 except AssertionError:

@@ -10,6 +10,7 @@ class ArraySlicingWrapper:
     ----------
     array
     """
+
     def __init__(self, array):
         self.array = array
 
@@ -24,6 +25,7 @@ class MockDataFrame:
     array
     """
     # have shape and length but don't support indexing.
+
     def __init__(self, array):
         self.array = array
         self.values = array
@@ -62,6 +64,7 @@ class CheckingClassifier(BaseEstimator, ClassifierMixin):
     foo_param
     expected_fit_params
     """
+
     def __init__(self, check_y=None, check_X=None, foo_param=0,
                  expected_fit_params=None):
         self.check_y = check_y

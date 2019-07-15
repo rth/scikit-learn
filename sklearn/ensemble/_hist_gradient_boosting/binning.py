@@ -99,6 +99,7 @@ class _BinMapper(BaseEstimator, TransformerMixin):
         Pseudo-random number generator to control the random sub-sampling.
         See :term:`random_state`.
     """
+
     def __init__(self, max_bins=256, subsample=int(2e5), random_state=None):
         self.max_bins = max_bins
         self.subsample = subsample

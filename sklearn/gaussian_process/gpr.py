@@ -148,6 +148,7 @@ class GaussianProcessRegressor(BaseEstimator, RegressorMixin,
     (array([653.0..., 592.1...]), array([316.6..., 316.6...]))
 
     """
+
     def __init__(self, kernel=None, alpha=1e-10,
                  optimizer="fmin_l_bfgs_b", n_restarts_optimizer=0,
                  normalize_y=False, copy_X_train=True, random_state=None):

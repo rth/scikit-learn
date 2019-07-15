@@ -132,6 +132,7 @@ class _CFNode:
         view of ``init_sq_norm_``.
 
     """
+
     def __init__(self, threshold, branching_factor, is_leaf, n_features):
         self.threshold = threshold
         self.branching_factor = branching_factor
@@ -273,6 +274,7 @@ class _CFSubcluster:
         Squared norm of the subcluster. Used to prevent recomputing when
         pairwise minimum distances are computed.
     """
+
     def __init__(self, linear_sum=None):
         if linear_sum is None:
             self.n_samples_ = 0

@@ -70,6 +70,7 @@ class FunctionTransformer(BaseEstimator, TransformerMixin):
         Dictionary of additional keyword arguments to pass to inverse_func.
 
     """
+
     def __init__(self, func=None, inverse_func=None, validate=False,
                  accept_sparse=False, check_inverse=True, kw_args=None,
                  inv_kw_args=None):

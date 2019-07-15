@@ -104,6 +104,7 @@ class EllipticEnvelope(MinCovDet, OutlierMixin):
        (1999)
 
     """
+
     def __init__(self, store_precision=True, assume_centered=False,
                  support_fraction=None, contamination=0.1,
                  random_state=None):

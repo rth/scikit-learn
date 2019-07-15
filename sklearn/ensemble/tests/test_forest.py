@@ -844,6 +844,7 @@ def check_min_weight_fraction_leaf(name):
                 "Failed with {0} min_weight_fraction_leaf={1}".format(
                     name, est.min_weight_fraction_leaf))
 
+
 @pytest.mark.parametrize('name', FOREST_ESTIMATORS)
 def test_min_weight_fraction_leaf(name):
     check_min_weight_fraction_leaf(name)
@@ -1085,7 +1086,7 @@ def check_warm_start(name, random_state=42):
     clf_no_ws.fit(X, y)
 
     assert (set([tree.random_state for tree in clf_ws]) ==
-                 set([tree.random_state for tree in clf_no_ws]))
+            set([tree.random_state for tree in clf_no_ws]))
 
     assert_array_equal(clf_ws.apply(X), clf_no_ws.apply(X),
                        err_msg="Failed with {0}".format(name))

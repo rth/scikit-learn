@@ -484,7 +484,6 @@ class BaseMultilayerPerceptron(BaseEstimator, metaclass=ABCMeta):
                 "cause of LBFGS stopping: %s."
                 % d['task'], ConvergenceWarning)
 
-
         self._unpack(optimal_parameters)
 
     def _fit_stochastic(self, X, y, activations, deltas, coef_grads,
@@ -920,6 +919,7 @@ class MLPClassifier(BaseMultilayerPerceptron, ClassifierMixin):
     Kingma, Diederik, and Jimmy Ba. "Adam: A method for stochastic
         optimization." arXiv preprint arXiv:1412.6980 (2014).
     """
+
     def __init__(self, hidden_layer_sizes=(100,), activation="relu",
                  solver='adam', alpha=0.0001,
                  batch_size='auto', learning_rate="constant",
@@ -1308,6 +1308,7 @@ class MLPRegressor(BaseMultilayerPerceptron, RegressorMixin):
     Kingma, Diederik, and Jimmy Ba. "Adam: A method for stochastic
         optimization." arXiv preprint arXiv:1412.6980 (2014).
     """
+
     def __init__(self, hidden_layer_sizes=(100,), activation="relu",
                  solver='adam', alpha=0.0001,
                  batch_size='auto', learning_rate="constant",

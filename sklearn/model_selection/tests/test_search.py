@@ -71,6 +71,7 @@ from sklearn.model_selection.tests.common import OneTimeSplitter
 # to test hyperparameter search on user-defined classifiers.
 class MockClassifier(object):
     """Dummy classifier to test the parameter search algorithms"""
+
     def __init__(self, foo_param=0):
         self.foo_param = foo_param
 
@@ -154,8 +155,8 @@ def test_parameter_grid():
         # tuple + chain transforms {"a": 1, "b": 2} to ("a", 1, "b", 2)
         points = set(tuple(chain(*(sorted(p.items())))) for p in grid2)
         assert (points ==
-                     set(("bar", x, "foo", y)
-                         for x, y in product(params2["bar"], params2["foo"])))
+                set(("bar", x, "foo", y)
+                    for x, y in product(params2["bar"], params2["foo"])))
     assert_grid_iter_equals_getitem(grid2)
 
     # Special case: empty grid (useful to get default estimator settings)
@@ -669,8 +670,10 @@ def test_gridsearch_nd():
     # Pass X as list in GridSearchCV
     X_4d = np.arange(10 * 5 * 3 * 2).reshape(10, 5, 3, 2)
     y_3d = np.arange(10 * 7 * 11).reshape(10, 7, 11)
-    check_X = lambda x: x.shape[1:] == (5, 3, 2)
-    check_y = lambda x: x.shape[1:] == (7, 11)
+
+    def check_X(x): return x.shape[1:] == (5, 3, 2)
+
+    def check_y(x): return x.shape[1:] == (7, 11)
     clf = CheckingClassifier(check_X=check_X, check_y=check_y)
     grid_search = GridSearchCV(clf, {'foo_param': [1, 2, 3]})
     grid_search.fit(X_4d, y_3d).score(X, y)

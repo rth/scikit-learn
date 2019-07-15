@@ -166,7 +166,7 @@ def _sparse_encode(X, dictionary, gram, cov=None, algorithm='lasso_lars',
 
     elif algorithm == 'threshold':
         new_code = ((np.sign(cov) *
-                    np.maximum(np.abs(cov) - regularization, 0)).T)
+                     np.maximum(np.abs(cov) - regularization, 0)).T)
         if positive:
             np.clip(new_code, 0, None, out=new_code)
 
@@ -1179,6 +1179,7 @@ class DictionaryLearning(BaseEstimator, SparseCodingMixin):
     SparsePCA
     MiniBatchSparsePCA
     """
+
     def __init__(self, n_components=None, alpha=1, max_iter=1000, tol=1e-8,
                  fit_algorithm='lars', transform_algorithm='omp',
                  transform_n_nonzero_coefs=None, transform_alpha=None,
@@ -1375,6 +1376,7 @@ class MiniBatchDictionaryLearning(BaseEstimator, SparseCodingMixin):
     MiniBatchSparsePCA
 
     """
+
     def __init__(self, n_components=None, alpha=1, n_iter=1000,
                  fit_algorithm='lars', n_jobs=None, batch_size=3, shuffle=True,
                  dict_init=None, transform_algorithm='omp',

@@ -292,7 +292,7 @@ def test_multiclass_multioutput_estimator():
         multi_class_svc_ = clone(multi_class_svc)  # create a clone
         multi_class_svc_.fit(X, y[:, i])
         assert (list(multi_class_svc_.predict(X)) ==
-                     list(predictions[:, i]))
+                list(predictions[:, i]))
 
 
 def test_multiclass_multioutput_estimator_predict_proba():
@@ -454,7 +454,7 @@ def test_classifier_chain_vs_independent_models():
     Y_pred_chain = chain.predict(X_test)
 
     assert (jaccard_score(Y_test, Y_pred_chain, average='samples') >
-                   jaccard_score(Y_test, Y_pred_ovr, average='samples'))
+            jaccard_score(Y_test, Y_pred_ovr, average='samples'))
 
 
 def test_base_chain_fit_and_predict():
@@ -467,7 +467,7 @@ def test_base_chain_fit_and_predict():
         Y_pred = chain.predict(X)
         assert Y_pred.shape == Y.shape
         assert ([c.coef_.size for c in chain.estimators_] ==
-                     list(range(X.shape[1], X.shape[1] + Y.shape[1])))
+                list(range(X.shape[1], X.shape[1] + Y.shape[1])))
 
     Y_prob = chains[1].predict_proba(X)
     Y_binary = (Y_prob >= .5)

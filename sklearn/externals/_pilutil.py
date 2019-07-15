@@ -319,6 +319,7 @@ def fromimage(im, flatten=False, mode=None):
     a = array(im)
     return a
 
+
 _errstr = "Mode is unknown or incompatible with input array shape."
 
 
@@ -499,6 +500,7 @@ def imresize(arr, size, interp='bilinear', mode=None):
         size = tuple((array(im.size)*size).astype(int))
     else:
         size = (size[1], size[0])
-    func = {'nearest': 0, 'lanczos': 1, 'bilinear': 2, 'bicubic': 3, 'cubic': 3}
+    func = {'nearest': 0, 'lanczos': 1,
+            'bilinear': 2, 'bicubic': 3, 'cubic': 3}
     imnew = im.resize(size, resample=func[interp])
     return fromimage(imnew)

@@ -384,7 +384,7 @@ def test_shuffle_dont_convert_to_array():
     d = MockDataFrame(np.array([['a', 0],
                                 ['b', 1],
                                 ['c', 2]],
-                      dtype=object))
+                               dtype=object))
     e = sp.csc_matrix(np.arange(6).reshape(3, 2))
     a_s, b_s, c_s, d_s, e_s = shuffle(a, b, c, d, e, random_state=0)
 

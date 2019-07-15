@@ -742,6 +742,7 @@ class DecisionTreeClassifier(BaseDecisionTree, ClassifierMixin):
     array([ 1.     ,  0.93...,  0.86...,  0.93...,  0.93...,
             0.93...,  0.93...,  1.     ,  0.93...,  1.      ])
     """
+
     def __init__(self,
                  criterion="gini",
                  splitter="best",
@@ -1086,6 +1087,7 @@ class DecisionTreeRegressor(BaseDecisionTree, RegressorMixin):
     array([ 0.61..., 0.57..., -0.34..., 0.41..., 0.75...,
             0.07..., 0.29..., 0.33..., -1.42..., -1.77...])
     """
+
     def __init__(self,
                  criterion="mse",
                  splitter="best",
@@ -1312,6 +1314,7 @@ class ExtraTreeClassifier(DecisionTreeClassifier):
     .. [1] P. Geurts, D. Ernst., and L. Wehenkel, "Extremely randomized trees",
            Machine Learning, 63(1), 3-42, 2006.
     """
+
     def __init__(self,
                  criterion="gini",
                  splitter="random",
@@ -1481,6 +1484,7 @@ class ExtraTreeRegressor(DecisionTreeRegressor):
     .. [1] P. Geurts, D. Ernst., and L. Wehenkel, "Extremely randomized trees",
            Machine Learning, 63(1), 3-42, 2006.
     """
+
     def __init__(self,
                  criterion="mse",
                  splitter="random",

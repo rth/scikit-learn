@@ -23,6 +23,7 @@ class _BasePCA(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     Warning: This class should not be used directly.
     Use derived classes instead.
     """
+
     def get_covariance(self):
         """Compute data covariance with the generative model.
 
@@ -154,6 +155,6 @@ class _BasePCA(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         """
         if self.whiten:
             return np.dot(X, np.sqrt(self.explained_variance_[:, np.newaxis]) *
-                            self.components_) + self.mean_
+                          self.components_) + self.mean_
         else:
             return np.dot(X, self.components_) + self.mean_

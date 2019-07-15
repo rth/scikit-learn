@@ -1515,6 +1515,7 @@ class SGDRegressor(BaseSGDRegressor):
     Ridge, ElasticNet, Lasso, sklearn.svm.SVR
 
     """
+
     def __init__(self, loss="squared_loss", penalty="l2", alpha=0.0001,
                  l1_ratio=0.15, fit_intercept=True, max_iter=1000, tol=1e-3,
                  shuffle=True, verbose=0, epsilon=DEFAULT_EPSILON,

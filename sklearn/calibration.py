@@ -104,6 +104,7 @@ class CalibratedClassifierCV(BaseEstimator, ClassifierMixin):
     .. [4] Predicting Good Probabilities with Supervised Learning,
            A. Niculescu-Mizil & R. Caruana, ICML 2005
     """
+
     def __init__(self, base_estimator=None, method='sigmoid', cv=None):
         self.base_estimator = base_estimator
         self.method = method
@@ -288,6 +289,7 @@ class _CalibratedClassifier:
     .. [4] Predicting Good Probabilities with Supervised Learning,
            A. Niculescu-Mizil & R. Caruana, ICML 2005
     """
+
     def __init__(self, base_estimator, method='sigmoid', classes=None):
         self.base_estimator = base_estimator
         self.method = method
@@ -474,6 +476,7 @@ class _SigmoidCalibration(BaseEstimator, RegressorMixin):
     b_ : float
         The intercept.
     """
+
     def fit(self, X, y, sample_weight=None):
         """Fit the model using X, y as training data.
 

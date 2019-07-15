@@ -27,7 +27,7 @@ def test_binomial_deviance():
 
     # pred has the same BD for y in {0, 1}
     assert (bd(np.array([0.0]), np.array([0.0])) ==
-                 bd(np.array([1.0]), np.array([0.0])))
+            bd(np.array([1.0]), np.array([0.0])))
 
     assert_almost_equal(bd(np.array([1.0, 1.0, 1.0]),
                            np.array([100.0, 100.0, 100.0])),
@@ -36,8 +36,8 @@ def test_binomial_deviance():
                            np.array([100.0, -100.0, -100.0])), 0)
 
     # check if same results as alternative definition of deviance (from ESLII)
-    alt_dev = lambda y, pred: np.mean(np.logaddexp(0.0, -2.0 *
-                                                   (2.0 * y - 1) * pred))
+    def alt_dev(y, pred): return np.mean(np.logaddexp(0.0, -2.0 *
+                                                      (2.0 * y - 1) * pred))
     test_data = [(np.array([1.0, 1.0, 1.0]), np.array([100.0, 100.0, 100.0])),
                  (np.array([0.0, 0.0, 0.0]), np.array([100.0, 100.0, 100.0])),
                  (np.array([0.0, 0.0, 0.0]),
@@ -49,7 +49,8 @@ def test_binomial_deviance():
         assert_almost_equal(bd(*datum), alt_dev(*datum))
 
     # check the gradient against the
-    alt_ng = lambda y, pred: (2 * y - 1) / (1 + np.exp(2 * (2 * y - 1) * pred))
+    def alt_ng(y, pred): return (2 * y - 1) / \
+        (1 + np.exp(2 * (2 * y - 1) * pred))
     for datum in test_data:
         assert_almost_equal(bd.negative_gradient(*datum), alt_ng(*datum))
 

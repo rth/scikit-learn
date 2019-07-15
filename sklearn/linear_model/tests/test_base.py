@@ -129,11 +129,11 @@ def test_fit_intercept():
     lr3_with_intercept = LinearRegression(fit_intercept=True).fit(X3, y)
 
     assert (lr2_with_intercept.coef_.shape ==
-                 lr2_without_intercept.coef_.shape)
+            lr2_without_intercept.coef_.shape)
     assert (lr3_with_intercept.coef_.shape ==
-                 lr3_without_intercept.coef_.shape)
+            lr3_without_intercept.coef_.shape)
     assert (lr2_without_intercept.coef_.ndim ==
-                 lr3_without_intercept.coef_.ndim)
+            lr3_without_intercept.coef_.ndim)
 
 
 def test_linear_regression_sparse(random_state=0):

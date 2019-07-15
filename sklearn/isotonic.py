@@ -219,6 +219,7 @@ class IsotonicRegression(BaseEstimator, TransformerMixin, RegressorMixin):
     >>> iso_reg.predict([.1, .2])
     array([1.8628..., 3.7256...])
     """
+
     def __init__(self, y_min=None, y_max=None, increasing=True,
                  out_of_bounds='nan'):
         self.y_min = y_min

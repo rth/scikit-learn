@@ -557,7 +557,6 @@ def resample(*arrays, **options):
 
         indices = random_state.permutation(indices)
 
-
     # convert sparse matrices to CSR for row-based indexing
     arrays = [a.tocsr() if issparse(a) else a for a in arrays]
     resampled_arrays = [safe_indexing(a, indices) for a in arrays]

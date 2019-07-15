@@ -803,6 +803,7 @@ class Exponentiation(Kernel):
         The exponent for the base kernel
 
     """
+
     def __init__(self, kernel, exponent):
         self.kernel = kernel
         self.exponent = exponent
@@ -964,6 +965,7 @@ class ConstantKernel(StationaryKernelMixin, Kernel):
         The lower and upper bound on constant_value
 
     """
+
     def __init__(self, constant_value=1.0, constant_value_bounds=(1e-5, 1e5)):
         self.constant_value = constant_value
         self.constant_value_bounds = constant_value_bounds
@@ -1061,6 +1063,7 @@ class WhiteKernel(StationaryKernelMixin, Kernel):
         The lower and upper bound on noise_level
 
     """
+
     def __init__(self, noise_level=1.0, noise_level_bounds=(1e-5, 1e5)):
         self.noise_level = noise_level
         self.noise_level_bounds = noise_level_bounds
@@ -1166,6 +1169,7 @@ class RBF(StationaryKernelMixin, NormalizedKernelMixin, Kernel):
         The lower and upper bound on length_scale
 
     """
+
     def __init__(self, length_scale=1.0, length_scale_bounds=(1e-5, 1e5)):
         self.length_scale = length_scale
         self.length_scale_bounds = length_scale_bounds
@@ -1246,7 +1250,7 @@ class RBF(StationaryKernelMixin, NormalizedKernelMixin, Kernel):
         if self.anisotropic:
             return "{0}(length_scale=[{1}])".format(
                 self.__class__.__name__, ", ".join(map("{0:.3g}".format,
-                                                   self.length_scale)))
+                                                       self.length_scale)))
         else:  # isotropic
             return "{0}(length_scale={1:.3g})".format(
                 self.__class__.__name__, np.ravel(self.length_scale)[0])
@@ -1291,6 +1295,7 @@ class Matern(RBF):
         its initial value and not optimized.
 
     """
+
     def __init__(self, length_scale=1.0, length_scale_bounds=(1e-5, 1e5),
                  nu=1.5):
         super().__init__(length_scale, length_scale_bounds)
@@ -1430,6 +1435,7 @@ class RationalQuadratic(StationaryKernelMixin, NormalizedKernelMixin, Kernel):
         The lower and upper bound on alpha
 
     """
+
     def __init__(self, length_scale=1.0, alpha=1.0,
                  length_scale_bounds=(1e-5, 1e5), alpha_bounds=(1e-5, 1e5)):
         self.length_scale = length_scale
@@ -1542,6 +1548,7 @@ class ExpSineSquared(StationaryKernelMixin, NormalizedKernelMixin, Kernel):
         The lower and upper bound on periodicity
 
     """
+
     def __init__(self, length_scale=1.0, periodicity=1.0,
                  length_scale_bounds=(1e-5, 1e5),
                  periodicity_bounds=(1e-5, 1e5)):

@@ -557,7 +557,7 @@ class _BaseRidge(LinearModel, MultiOutputMixin, metaclass=ABCMeta):
 
         # temporary fix for fitting the intercept with sparse data using 'sag'
         if (sparse.issparse(X) and self.fit_intercept and
-           self.solver != 'sparse_cg'):
+                self.solver != 'sparse_cg'):
             self.coef_, self.n_iter_, self.intercept_ = _ridge_regression(
                 X, y, alpha=self.alpha, sample_weight=sample_weight,
                 max_iter=self.max_iter, tol=self.tol, solver=self.solver,
@@ -716,6 +716,7 @@ class Ridge(_BaseRidge, RegressorMixin):
     Ridge()
 
     """
+
     def __init__(self, alpha=1.0, fit_intercept=True, normalize=False,
                  copy_X=True, max_iter=None, tol=1e-3, solver="auto",
                  random_state=None):

@@ -118,7 +118,7 @@ def test_precomputed():
     # same as before, but using a callable function instead of the kernel
     # matrix. kernel is just a linear kernel
 
-    kfunc = lambda x, y: np.dot(x, y.T)
+    def kfunc(x, y): return np.dot(x, y.T)
     clf = svm.SVC(kernel=kfunc)
     clf.fit(X, Y)
     pred = clf.predict(T)

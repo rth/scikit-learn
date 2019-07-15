@@ -137,7 +137,7 @@ def test_binary_search_neighbors():
     neighbors_nn = np.argsort(distances, axis=1)[:, 1:k].astype(np.int64,
                                                                 copy=False)
     distances_nn = np.array([distances[k, neighbors_nn[k]]
-                            for k in range(n_samples)])
+                             for k in range(n_samples)])
     P2 = _binary_search_perplexity(distances_nn, neighbors_nn,
                                    desired_perplexity, verbose=0)
     P_nn = np.array([P1[k, neighbors_nn[k]] for k in range(n_samples)])
@@ -150,7 +150,7 @@ def test_binary_search_neighbors():
         neighbors_nn = np.argsort(distances, axis=1)[:, :k].astype(np.int64,
                                                                    copy=False)
         distances_nn = np.array([distances[k, neighbors_nn[k]]
-                                for k in range(n_samples)])
+                                 for k in range(n_samples)])
         P2k = _binary_search_perplexity(distances_nn, neighbors_nn,
                                         desired_perplexity, verbose=0)
         idx = np.argsort(P1.ravel())[::-1]
@@ -296,8 +296,8 @@ def test_trustworthiness_not_euclidean_metric():
     random_state = check_random_state(0)
     X = random_state.randn(100, 2)
     assert (trustworthiness(X, X, metric='cosine') ==
-                 trustworthiness(pairwise_distances(X, metric='cosine'), X,
-                                 metric='precomputed'))
+            trustworthiness(pairwise_distances(X, metric='cosine'), X,
+                            metric='precomputed'))
 
 
 def test_early_exaggeration_too_small():

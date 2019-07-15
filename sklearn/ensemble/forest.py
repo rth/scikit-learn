@@ -480,7 +480,8 @@ class ForestClassifier(BaseForest, ClassifierMixin, metaclass=ABCMeta):
 
         y_store_unique_indices = np.zeros(y.shape, dtype=np.int)
         for k in range(self.n_outputs_):
-            classes_k, y_store_unique_indices[:, k] = np.unique(y[:, k], return_inverse=True)
+            classes_k, y_store_unique_indices[:, k] = np.unique(
+                y[:, k], return_inverse=True)
             self.classes_.append(classes_k)
             self.n_classes_.append(classes_k.shape[0])
         y = y_store_unique_indices
@@ -984,6 +985,7 @@ class RandomForestClassifier(ForestClassifier):
     --------
     DecisionTreeClassifier, ExtraTreesClassifier
     """
+
     def __init__(self,
                  n_estimators=100,
                  criterion="gini",
@@ -1238,6 +1240,7 @@ class RandomForestRegressor(ForestRegressor):
     --------
     DecisionTreeRegressor, ExtraTreesRegressor
     """
+
     def __init__(self,
                  n_estimators=100,
                  criterion="mse",
@@ -1493,6 +1496,7 @@ class ExtraTreesClassifier(ForestClassifier):
     RandomForestClassifier : Ensemble Classifier based on trees with optimal
         splits.
     """
+
     def __init__(self,
                  n_estimators=100,
                  criterion="gini",
@@ -1717,6 +1721,7 @@ class ExtraTreesRegressor(ForestRegressor):
     sklearn.tree.ExtraTreeRegressor: Base estimator for this ensemble.
     RandomForestRegressor: Ensemble regressor using trees with optimal splits.
     """
+
     def __init__(self,
                  n_estimators=100,
                  criterion="mse",

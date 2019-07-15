@@ -239,7 +239,7 @@ def test_bootstrap_samples():
                                 random_state=rng).fit(X_train, y_train)
 
     assert (base_estimator.score(X_train, y_train) ==
-                 ensemble.score(X_train, y_train))
+            ensemble.score(X_train, y_train))
 
     # with bootstrap, trees are no longer perfect on the training set
     ensemble = BaggingRegressor(base_estimator=DecisionTreeRegressor(),
@@ -248,7 +248,7 @@ def test_bootstrap_samples():
                                 random_state=rng).fit(X_train, y_train)
 
     assert (base_estimator.score(X_train, y_train) >
-                   ensemble.score(X_train, y_train))
+            ensemble.score(X_train, y_train))
 
     # check that each sampling correspond to a complete bootstrap resample.
     # the size of each bootstrap should be the same as the input data but
@@ -620,7 +620,7 @@ def test_warm_start(random_state=42):
     clf_no_ws.fit(X, y)
 
     assert (set([tree.random_state for tree in clf_ws]) ==
-                 set([tree.random_state for tree in clf_no_ws]))
+            set([tree.random_state for tree in clf_no_ws]))
 
 
 def test_warm_start_smaller_n_estimators():

@@ -1033,7 +1033,7 @@ def test_complete_classification():
     tree = est.estimators_[0, 0].tree_
     assert tree.max_depth == k
     assert (tree.children_left[tree.children_left == TREE_LEAF].shape[0] ==
-                 k + 1)
+            k + 1)
 
 
 def test_complete_regression():
@@ -1047,7 +1047,7 @@ def test_complete_regression():
 
     tree = est.estimators_[-1, 0].tree_
     assert (tree.children_left[tree.children_left == TREE_LEAF].shape[0] ==
-                 k + 1)
+            k + 1)
 
 
 def test_zero_estimator_reg():

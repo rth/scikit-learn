@@ -332,7 +332,8 @@ def test_roc_curve_toydata():
     y_true = [0, 0]
     y_score = [0.25, 0.75]
     # assert UndefinedMetricWarning because of no positive sample in y_true
-    tpr, fpr, _ = assert_warns(UndefinedMetricWarning, roc_curve, y_true, y_score)
+    tpr, fpr, _ = assert_warns(
+        UndefinedMetricWarning, roc_curve, y_true, y_score)
     assert_raises(ValueError, roc_auc_score, y_true, y_score)
     assert_array_almost_equal(tpr, [0., 0.5, 1.])
     assert_array_almost_equal(fpr, [np.nan, np.nan, np.nan])
@@ -340,7 +341,8 @@ def test_roc_curve_toydata():
     y_true = [1, 1]
     y_score = [0.25, 0.75]
     # assert UndefinedMetricWarning because of no negative sample in y_true
-    tpr, fpr, _ = assert_warns(UndefinedMetricWarning, roc_curve, y_true, y_score)
+    tpr, fpr, _ = assert_warns(
+        UndefinedMetricWarning, roc_curve, y_true, y_score)
     assert_raises(ValueError, roc_auc_score, y_true, y_score)
     assert_array_almost_equal(tpr, [np.nan, np.nan, np.nan])
     assert_array_almost_equal(fpr, [0., 0.5, 1.])
@@ -488,6 +490,7 @@ def test_binary_clf_curve():
     assert_raise_message(ValueError, msg, precision_recall_curve,
                          y_true, y_pred)
 
+
 def test_precision_recall_curve():
     y_true, _, probas_pred = make_prediction(binary=True)
     _test_precision_recall_curve(y_true, probas_pred)
@@ -598,9 +601,9 @@ def test_precision_recall_curve_toydata():
         assert_raises(Exception, average_precision_score, y_true, y_score,
                       average="weighted")
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="samples"), 1.)
+                                                    average="samples"), 1.)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="micro"), 1.)
+                                                    average="micro"), 1.)
 
         y_true = np.array([[0, 1], [0, 1]])
         y_score = np.array([[0, 1], [1, 0]])
@@ -609,31 +612,31 @@ def test_precision_recall_curve_toydata():
         assert_raises(Exception, average_precision_score, y_true, y_score,
                       average="weighted")
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="samples"), 0.75)
+                                                    average="samples"), 0.75)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="micro"), 0.5)
+                                                    average="micro"), 0.5)
 
         y_true = np.array([[1, 0], [0, 1]])
         y_score = np.array([[0, 1], [1, 0]])
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="macro"), 0.5)
+                                                    average="macro"), 0.5)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="weighted"), 0.5)
+                                                    average="weighted"), 0.5)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="samples"), 0.5)
+                                                    average="samples"), 0.5)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="micro"), 0.5)
+                                                    average="micro"), 0.5)
 
         y_true = np.array([[1, 0], [0, 1]])
         y_score = np.array([[0.5, 0.5], [0.5, 0.5]])
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="macro"), 0.5)
+                                                    average="macro"), 0.5)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="weighted"), 0.5)
+                                                    average="weighted"), 0.5)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="samples"), 0.5)
+                                                    average="samples"), 0.5)
         assert_almost_equal(average_precision_score(y_true, y_score,
-                            average="micro"), 0.5)
+                                                    average="micro"), 0.5)
 
 
 def test_average_precision_constant_values():

@@ -22,7 +22,7 @@ def test_20news():
     # Check that the ordering of the target_names is the same
     # as the ordering in the full dataset
     assert (data2cats.target_names ==
-                 data.target_names[-2:])
+            data.target_names[-2:])
     # Assert that we have only 0 and 1 as labels
     assert np.unique(data2cats.target).tolist() == [0, 1]
 

@@ -241,6 +241,7 @@ class ParameterSampler:
     ...                  {'b': 1.038159, 'a': 2}]
     True
     """
+
     def __init__(self, param_distributions, n_iter, random_state=None):
         self.param_distributions = param_distributions
         self.n_iter = n_iter
@@ -698,7 +699,7 @@ class BaseSearchCV(BaseEstimator, MetaEstimatorMixin, metaclass=ABCMeta):
                 if not isinstance(self.best_index_, numbers.Integral):
                     raise TypeError('best_index_ returned is not an integer')
                 if (self.best_index_ < 0 or
-                   self.best_index_ >= len(results["params"])):
+                        self.best_index_ >= len(results["params"])):
                     raise IndexError('best_index_ index out of range')
             else:
                 self.best_index_ = results["rank_test_%s"

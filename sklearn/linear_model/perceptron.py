@@ -137,6 +137,7 @@ class Perceptron(BaseSGDClassifier):
 
     https://en.wikipedia.org/wiki/Perceptron and references therein.
     """
+
     def __init__(self, penalty=None, alpha=0.0001, fit_intercept=True,
                  max_iter=1000, tol=1e-3, shuffle=True, verbose=0, eta0=1.0,
                  n_jobs=None, random_state=0, early_stopping=False,

@@ -176,6 +176,7 @@ class OneVsRestClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin,
     multilabel_ : boolean
         Whether a OneVsRestClassifier is a multilabel classifier.
     """
+
     def __init__(self, estimator, n_jobs=None):
         self.estimator = estimator
         self.n_jobs = n_jobs
@@ -246,7 +247,7 @@ class OneVsRestClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin,
         if _check_partial_fit_first_call(self, classes):
             if not hasattr(self.estimator, "partial_fit"):
                 raise ValueError(("Base estimator {0}, doesn't have "
-                                 "partial_fit method").format(self.estimator))
+                                  "partial_fit method").format(self.estimator))
             self.estimators_ = [clone(self.estimator) for _ in range
                                 (self.n_classes_)]
 
@@ -259,8 +260,8 @@ class OneVsRestClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin,
 
         if len(np.setdiff1d(y, self.classes_)):
             raise ValueError(("Mini-batch contains {0} while classes " +
-                             "must be subset of {1}").format(np.unique(y),
-                                                             self.classes_))
+                              "must be subset of {1}").format(np.unique(y),
+                                                              self.classes_))
 
         Y = self.label_binarizer_.transform(y)
         Y = Y.tocsc()
@@ -559,7 +560,7 @@ class OneVsOneClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
                 delayed(_partial_fit_ovo_binary)(
                     estimator, X, y, self.classes_[i], self.classes_[j])
                 for estimator, (i, j) in zip(self.estimators_,
-                                              (combinations)))
+                                             (combinations)))
 
         self.pairwise_indices_ = None
 

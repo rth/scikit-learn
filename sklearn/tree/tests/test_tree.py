@@ -438,12 +438,12 @@ def test_max_features():
         est = TreeEstimator(max_features="sqrt")
         est.fit(iris.data, iris.target)
         assert (est.max_features_ ==
-                     int(np.sqrt(iris.data.shape[1])))
+                int(np.sqrt(iris.data.shape[1])))
 
         est = TreeEstimator(max_features="log2")
         est.fit(iris.data, iris.target)
         assert (est.max_features_ ==
-                     int(np.log2(iris.data.shape[1])))
+                int(np.log2(iris.data.shape[1])))
 
         est = TreeEstimator(max_features=1)
         est.fit(iris.data, iris.target)
@@ -460,7 +460,7 @@ def test_max_features():
         est = TreeEstimator(max_features=0.5)
         est.fit(iris.data, iris.target)
         assert (est.max_features_ ==
-                     int(0.5 * iris.data.shape[1]))
+                int(0.5 * iris.data.shape[1]))
 
         est = TreeEstimator(max_features=1.0)
         est.fit(iris.data, iris.target)
@@ -1238,7 +1238,7 @@ def test_only_constant_features():
 
 def test_behaviour_constant_feature_after_splits():
     X = np.transpose(np.vstack(([[0, 0, 0, 0, 0, 1, 2, 4, 5, 6, 7]],
-                               np.zeros((4, 11)))))
+                                np.zeros((4, 11)))))
     y = [0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3]
     for name, TreeEstimator in ALL_TREES.items():
         # do not check extra random trees

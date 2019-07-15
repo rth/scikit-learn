@@ -104,6 +104,7 @@ class TransformedTargetRegressor(BaseEstimator, RegressorMixin):
     <sphx_glr_auto_examples_compose_plot_transformed_target.py>`.
 
     """
+
     def __init__(self, regressor=None, transformer=None,
                  func=None, inverse_func=None, check_inverse=True):
         self.regressor = regressor

@@ -28,6 +28,7 @@ from ..utils import deprecated
 ###############################################################################
 # For non fully-connected graphs
 
+
 def _fix_connectivity(X, connectivity, affinity):
     """
     Fixes the connectivity matrix

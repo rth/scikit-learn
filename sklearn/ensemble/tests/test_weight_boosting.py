@@ -126,7 +126,7 @@ def test_iris():
         assert len(clf.estimators_) > 1
         # Check for distinct random states (see issue #7408)
         assert (len(set(est.random_state for est in clf.estimators_)) ==
-                     len(clf.estimators_))
+                len(clf.estimators_))
 
     # Somewhat hacky regression test: prior to
     # ae7adc880d624615a34bafdb1d75ef67051b8200,
@@ -147,7 +147,7 @@ def test_boston():
     assert len(reg.estimators_) > 1
     # Check for distinct random states (see issue #7408)
     assert (len(set(est.random_state for est in reg.estimators_)) ==
-                 len(reg.estimators_))
+            len(reg.estimators_))
 
 
 def test_staged_predict():
@@ -408,7 +408,7 @@ def test_sparse_classification():
         types = [i.data_type_ for i in sparse_classifier.estimators_]
 
         assert all([(t == csc_matrix or t == csr_matrix)
-                   for t in types])
+                    for t in types])
 
 
 def test_sparse_regression():
@@ -459,7 +459,7 @@ def test_sparse_regression():
         types = [i.data_type_ for i in sparse_classifier.estimators_]
 
         assert all([(t == csc_matrix or t == csr_matrix)
-                   for t in types])
+                    for t in types])
 
 
 def test_sample_weight_adaboost_regressor():

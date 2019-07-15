@@ -168,6 +168,7 @@ class SimpleImputer(BaseEstimator, TransformerMixin):
     `transform` if strategy is not "constant".
 
     """
+
     def __init__(self, missing_values=np.nan, strategy="mean",
                  fill_value=None, verbose=0, copy=True, add_indicator=False):
         self.missing_values = missing_values
@@ -608,7 +609,7 @@ class MissingIndicator(BaseEstimator, TransformerMixin):
                              "'all'. Got {} instead.".format(self.features))
 
         if not ((isinstance(self.sparse, str) and
-                self.sparse == "auto") or isinstance(self.sparse, bool)):
+                 self.sparse == "auto") or isinstance(self.sparse, bool)):
             raise ValueError("'sparse' has to be a boolean or 'auto'. "
                              "Got {!r} instead.".format(self.sparse))
 

@@ -512,6 +512,7 @@ class Nystroem(BaseEstimator, TransformerMixin):
 
     sklearn.metrics.pairwise.kernel_metrics : List of built-in kernels.
     """
+
     def __init__(self, kernel="rbf", gamma=None, coef0=None, degree=None,
                  kernel_params=None, n_components=100, random_state=None):
         self.kernel = kernel

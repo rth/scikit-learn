@@ -149,7 +149,7 @@ def test_svc_iris():
     for k in ('linear', 'poly', 'rbf'):
         sp_clf = svm.SVC(kernel=k).fit(iris.data, iris.target)
         clf = svm.SVC(kernel=k).fit(iris.data.toarray(),
-                                                   iris.target)
+                                    iris.target)
 
         assert_array_almost_equal(clf.support_vectors_,
                                   sp_clf.support_vectors_.toarray())

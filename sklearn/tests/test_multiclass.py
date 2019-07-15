@@ -263,7 +263,7 @@ def test_ovr_binary():
             probabilities = clf.predict_proba(X_test)
             assert 2 == len(probabilities[0])
             assert (clf.classes_[np.argmax(probabilities, axis=1)] ==
-                         clf.predict(X_test))
+                    clf.predict(X_test))
 
         # test input as label indicator matrix
         clf = OneVsRestClassifier(base_clf).fit(X, Y)
@@ -452,7 +452,7 @@ def test_ovr_coef_():
             assert shape[1] == iris.data.shape[1]
             # don't densify sparse coefficients
             assert (sp.issparse(ovr.estimators_[0].coef_) ==
-                         sp.issparse(ovr.coef_))
+                    sp.issparse(ovr.coef_))
 
 
 def test_ovr_coef_exceptions():
@@ -726,7 +726,7 @@ def test_pairwise_indices():
 
     for idx in precomputed_indices:
         assert (idx.shape[0] * n_estimators / (n_estimators - 1) ==
-                     linear_kernel.shape[0])
+                linear_kernel.shape[0])
 
 
 def test_pairwise_attribute():

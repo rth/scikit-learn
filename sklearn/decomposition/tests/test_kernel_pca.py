@@ -44,7 +44,7 @@ def test_kernel_pca():
             # transform new data
             X_pred_transformed = kpca.transform(X_pred)
             assert (X_pred_transformed.shape[1] ==
-                         X_fit_transformed.shape[1])
+                    X_fit_transformed.shape[1])
 
             # inverse transform
             if inv:
@@ -103,7 +103,7 @@ def test_kernel_pca_sparse():
             # transform new data
             X_pred_transformed = kpca.transform(X_pred)
             assert (X_pred_transformed.shape[1] ==
-                         X_fit_transformed.shape[1])
+                    X_fit_transformed.shape[1])
 
             # inverse transform
             # X_pred2 = kpca.inverse_transform(X_pred_transformed)

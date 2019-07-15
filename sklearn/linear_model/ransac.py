@@ -288,14 +288,16 @@ class RANSACRegressor(BaseEstimator, MetaEstimatorMixin, RegressorMixin,
 
         if self.loss == "absolute_loss":
             if y.ndim == 1:
-                loss_function = lambda y_true, y_pred: np.abs(y_true - y_pred)
+                def loss_function(y_true, y_pred): return np.abs(
+                    y_true - y_pred)
             else:
                 loss_function = lambda \
                     y_true, y_pred: np.sum(np.abs(y_true - y_pred), axis=1)
 
         elif self.loss == "squared_loss":
             if y.ndim == 1:
-                loss_function = lambda y_true, y_pred: (y_true - y_pred) ** 2
+                def loss_function(y_true, y_pred): return (
+                    y_true - y_pred) ** 2
             else:
                 loss_function = lambda \
                     y_true, y_pred: np.sum((y_true - y_pred) ** 2, axis=1)
@@ -307,7 +309,6 @@ class RANSACRegressor(BaseEstimator, MetaEstimatorMixin, RegressorMixin,
             raise ValueError(
                 "loss should be 'absolute_loss', 'squared_loss' or a callable."
                 "Got %s. " % self.loss)
-
 
         random_state = check_random_state(self.random_state)
 
@@ -418,7 +419,7 @@ class RANSACRegressor(BaseEstimator, MetaEstimatorMixin, RegressorMixin,
 
             # break if sufficient number of inliers or score is reached
             if n_inliers_best >= self.stop_n_inliers or \
-                            score_best >= self.stop_score:
+                    score_best >= self.stop_score:
                 break
 
         # if none of the iterations met the required criteria

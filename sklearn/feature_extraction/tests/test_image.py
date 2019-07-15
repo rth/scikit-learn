@@ -126,6 +126,7 @@ def _make_images(face=None):
     images[2] = face + 2
     return images
 
+
 downsampled_face = _downsampled_face()
 orange_face = _orange_face(downsampled_face)
 face_collection = _make_images(downsampled_face)

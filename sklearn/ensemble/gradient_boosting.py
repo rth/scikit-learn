@@ -76,6 +76,7 @@ class QuantileEstimator:
     alpha : float
         The quantile
     """
+
     def __init__(self, alpha=0.9):
         if not 0 < alpha < 1.0:
             raise ValueError("`alpha` must be in (0, 1.0) but was %r" % alpha)
@@ -125,6 +126,7 @@ class QuantileEstimator:
             "0.21 and will be removed in version 0.23.")
 class MeanEstimator:
     """An estimator predicting the mean of the training targets."""
+
     def fit(self, X, y, sample_weight=None):
         """Fit the estimator.
 
@@ -229,6 +231,7 @@ class PriorProbabilityEstimator:
     """An estimator predicting the probability of each
     class in the training data.
     """
+
     def fit(self, X, y, sample_weight=None):
         """Fit the estimator.
 
@@ -446,6 +449,7 @@ class RegressionLossFunction(LossFunction, metaclass=ABCMeta):
     n_classes : int
         Number of classes
     """
+
     def __init__(self, n_classes):
         if n_classes != 1:
             raise ValueError("``n_classes`` must be 1 for regression but "
@@ -550,6 +554,7 @@ class LeastAbsoluteError(RegressionLossFunction):
     n_classes : int
         Number of classes
     """
+
     def init_estimator(self):
         return QuantileEstimator(alpha=0.5)
 
@@ -594,8 +599,10 @@ class LeastAbsoluteError(RegressionLossFunction):
         """LAD updates terminal regions to median estimates. """
         terminal_region = np.where(terminal_regions == leaf)[0]
         sample_weight = sample_weight.take(terminal_region, axis=0)
-        diff = y.take(terminal_region, axis=0) - pred.take(terminal_region, axis=0)
-        tree.value[leaf, 0, 0] = _weighted_percentile(diff, sample_weight, percentile=50)
+        diff = y.take(terminal_region, axis=0) - \
+            pred.take(terminal_region, axis=0)
+        tree.value[leaf, 0, 0] = _weighted_percentile(
+            diff, sample_weight, percentile=50)
 
 
 @deprecated("All Losses in sklearn.ensemble.gradient_boosting are "
@@ -649,15 +656,18 @@ class HuberLossFunction(RegressionLossFunction):
             if sample_weight is None:
                 gamma = np.percentile(np.abs(diff), self.alpha * 100)
             else:
-                gamma = _weighted_percentile(np.abs(diff), sample_weight, self.alpha * 100)
+                gamma = _weighted_percentile(
+                    np.abs(diff), sample_weight, self.alpha * 100)
 
         gamma_mask = np.abs(diff) <= gamma
         if sample_weight is None:
             sq_loss = np.sum(0.5 * diff[gamma_mask] ** 2.0)
-            lin_loss = np.sum(gamma * (np.abs(diff[~gamma_mask]) - gamma / 2.0))
+            lin_loss = np.sum(
+                gamma * (np.abs(diff[~gamma_mask]) - gamma / 2.0))
             loss = (sq_loss + lin_loss) / y.shape[0]
         else:
-            sq_loss = np.sum(0.5 * sample_weight[gamma_mask] * diff[gamma_mask] ** 2.0)
+            sq_loss = np.sum(
+                0.5 * sample_weight[gamma_mask] * diff[gamma_mask] ** 2.0)
             lin_loss = np.sum(gamma * sample_weight[~gamma_mask] *
                               (np.abs(diff[~gamma_mask]) - gamma / 2.0))
             loss = (sq_loss + lin_loss) / sample_weight.sum()
@@ -682,7 +692,8 @@ class HuberLossFunction(RegressionLossFunction):
         if sample_weight is None:
             gamma = np.percentile(np.abs(diff), self.alpha * 100)
         else:
-            gamma = _weighted_percentile(np.abs(diff), sample_weight, self.alpha * 100)
+            gamma = _weighted_percentile(
+                np.abs(diff), sample_weight, self.alpha * 100)
         gamma_mask = np.abs(diff) <= gamma
         residual = np.zeros((y.shape[0],), dtype=np.float64)
         residual[gamma_mask] = diff[gamma_mask]
@@ -721,6 +732,7 @@ class QuantileLossFunction(RegressionLossFunction):
     alpha : float, optional (default = 0.9)
         The percentile
     """
+
     def __init__(self, n_classes, alpha=0.9):
         super().__init__(n_classes)
         self.alpha = alpha
@@ -753,7 +765,7 @@ class QuantileLossFunction(RegressionLossFunction):
                     (1.0 - alpha) * diff[~mask].sum()) / y.shape[0]
         else:
             loss = ((alpha * np.sum(sample_weight[mask] * diff[mask]) -
-                    (1.0 - alpha) * np.sum(sample_weight[~mask] * diff[~mask])) /
+                     (1.0 - alpha) * np.sum(sample_weight[~mask] * diff[~mask])) /
                     sample_weight.sum())
         return loss
 
@@ -795,7 +807,8 @@ class ClassificationLossFunction(LossFunction, metaclass=ABCMeta):
 
          the does not support probabilities raises AttributeError.
         """
-        raise TypeError('%s does not support predict_proba' % type(self).__name__)
+        raise TypeError('%s does not support predict_proba' %
+                        type(self).__name__)
 
     @abstractmethod
     def _score_to_decision(self, score):
@@ -819,6 +832,7 @@ class BinomialDeviance(ClassificationLossFunction):
     n_classes : int
         Number of classes.
     """
+
     def __init__(self, n_classes):
         if n_classes != 2:
             raise ValueError("{0:s} requires 2 classes; got {1:d} class(es)"
@@ -880,7 +894,8 @@ class BinomialDeviance(ClassificationLossFunction):
         sample_weight = sample_weight.take(terminal_region, axis=0)
 
         numerator = np.sum(sample_weight * residual)
-        denominator = np.sum(sample_weight * (y - residual) * (1 - y + residual))
+        denominator = np.sum(sample_weight * (y - residual)
+                             * (1 - y + residual))
 
         # prevents overflow and division by zero
         if abs(denominator) < 1e-150:
@@ -1014,6 +1029,7 @@ class ExponentialLoss(ClassificationLossFunction):
     n_classes : int
         Number of classes.
     """
+
     def __init__(self, n_classes):
         if n_classes != 2:
             raise ValueError("{0:s} requires 2 classes; got {1:d} class(es)"

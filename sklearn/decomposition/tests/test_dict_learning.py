@@ -80,7 +80,7 @@ def test_max_iter():
 
     # Compute a wavelet dictionary
     D_multi = np.r_[tuple(ricker_matrix(width=w, resolution=resolution,
-                          n_components=n_components // 5)
+                                        n_components=n_components // 5)
                           for w in (10, 50, 100, 500, 1000))]
 
     X = np.linspace(0, resolution - 1, resolution)

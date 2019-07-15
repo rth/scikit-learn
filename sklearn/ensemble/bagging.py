@@ -552,6 +552,7 @@ class BaggingClassifier(BaseBagging, ClassifierMixin):
     .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
            Learning and Knowledge Discovery in Databases, 346-361, 2012.
     """
+
     def __init__(self,
                  base_estimator=None,
                  n_estimators=10,

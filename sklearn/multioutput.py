@@ -420,7 +420,7 @@ class _BaseChain(BaseEstimator, metaclass=ABCMeta):
             if self.order_ == 'random':
                 self.order_ = random_state.permutation(Y.shape[1])
         elif sorted(self.order_) != list(range(Y.shape[1])):
-                raise ValueError("invalid order")
+            raise ValueError("invalid order")
 
         self.estimators_ = [clone(self.base_estimator)
                             for _ in range(Y.shape[1])]
@@ -718,6 +718,7 @@ class RegressorChain(_BaseChain, RegressorMixin, MetaEstimatorMixin):
         chaining.
 
     """
+
     def fit(self, X, Y):
         """Fit the model to data matrix X and targets Y.
 

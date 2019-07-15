@@ -93,7 +93,7 @@ def test_kernel_theta(kernel):
     # hyperparameter values (being their logarithms)
     for i, hyperparameter in enumerate(kernel.hyperparameters):
         assert (theta[i] ==
-                     np.log(getattr(kernel, hyperparameter.name)))
+                np.log(getattr(kernel, hyperparameter.name)))
 
     # Fixed kernel parameters must be excluded from theta and gradient.
     for i, hyperparameter in enumerate(kernel.hyperparameters):
@@ -237,7 +237,7 @@ def test_kernel_clone_after_set_params(kernel):
         kernel_cloned.set_params(**params)
         kernel_cloned_clone = clone(kernel_cloned)
         assert (kernel_cloned_clone.get_params() ==
-                     kernel_cloned.get_params())
+                kernel_cloned.get_params())
         assert id(kernel_cloned_clone) != id(kernel_cloned)
         check_hyperparameters_equal(kernel_cloned, kernel_cloned_clone)
 

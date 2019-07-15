@@ -614,7 +614,6 @@ def test_cnb():
     assert_array_almost_equal(clf.feature_log_prob_, normed_weights)
 
 
-
 def test_alpha():
     # Setting alpha=0 should not output nan results when p(x_i|y_j)=0 is a case
     X = np.array([[1, 0], [1, 1]])

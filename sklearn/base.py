@@ -610,12 +610,14 @@ class MetaEstimatorMixin:
 
 class MultiOutputMixin(object):
     """Mixin to mark estimators that support multioutput."""
+
     def _more_tags(self):
         return {'multioutput': True}
 
 
 class _UnstableArchMixin(object):
     """Mark estimators that are non-determinstic on 32bit or PowerPC"""
+
     def _more_tags(self):
         return {'non_deterministic': (
             _IS_32BIT or platform.machine().startswith(('ppc', 'powerpc')))}

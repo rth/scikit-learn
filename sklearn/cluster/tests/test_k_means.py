@@ -769,7 +769,7 @@ def test_float_precision(Estimator, is_sparse):
         centers[dtype] = estimator.cluster_centers_
         # ensure the extracted row is a 2d array
         assert (estimator.predict(X_test[:1]) ==
-                     estimator.labels_[0])
+                estimator.labels_[0])
         if hasattr(estimator, 'partial_fit'):
             estimator.partial_fit(X_test[0:3])
             # dtype of cluster centers has to stay the same after

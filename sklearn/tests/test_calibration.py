@@ -58,7 +58,7 @@ def test_calibration():
 
             # Check that brier score has improved after calibration
             assert (brier_score_loss(y_test, prob_pos_clf) >
-                           brier_score_loss(y_test, prob_pos_pc_clf))
+                    brier_score_loss(y_test, prob_pos_pc_clf))
 
             # Check invariance against relabeling [0, 1] -> [1, 2]
             pc_clf.fit(this_X_train, y_train + 1, sample_weight=sw_train)
@@ -84,8 +84,8 @@ def test_calibration():
                 # Isotonic calibration is not invariant against relabeling
                 # but should improve in both cases
                 assert (brier_score_loss(y_test, prob_pos_clf) >
-                               brier_score_loss((y_test + 1) % 2,
-                                                prob_pos_pc_clf_relabeled))
+                        brier_score_loss((y_test + 1) % 2,
+                                         prob_pos_pc_clf_relabeled))
 
         # Check failure cases:
         # only "isotonic" and "sigmoid" should be accepted as methods
@@ -217,7 +217,7 @@ def test_calibration_prefit():
                                    np.array([0, 1])[np.argmax(y_prob, axis=1)])
 
                 assert (brier_score_loss(y_test, prob_pos_clf) >
-                               brier_score_loss(y_test, prob_pos_pc_clf))
+                        brier_score_loss(y_test, prob_pos_pc_clf))
 
 
 def test_sigmoid_calibration():

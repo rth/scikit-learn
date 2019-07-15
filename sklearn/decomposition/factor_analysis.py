@@ -134,6 +134,7 @@ class FactorAnalysis(BaseEstimator, TransformerMixin):
     FastICA: Independent component analysis, a latent variable model with
         non-Gaussian latent variables.
     """
+
     def __init__(self, n_components=None, tol=1e-2, copy=True, max_iter=1000,
                  noise_variance_init=None, svd_method='randomized',
                  iterated_power=3, random_state=0):

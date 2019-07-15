@@ -317,7 +317,7 @@ class RadiusNeighborsRegressor(NeighborsBase, RadiusNeighborsMixin,
 
         else:
             y_pred = np.array([np.average(_y[ind, :], axis=0,
-                               weights=weights[i])
+                                          weights=weights[i])
                                if len(ind) else empty_obs
                                for (i, ind) in enumerate(neigh_ind)])
 
@@ -325,7 +325,6 @@ class RadiusNeighborsRegressor(NeighborsBase, RadiusNeighborsMixin,
             empty_warning_msg = ("One or more samples have no neighbors "
                                  "within specified radius; predicting NaN.")
             warnings.warn(empty_warning_msg)
-
 
         if self._y.ndim == 1:
             y_pred = y_pred.ravel()

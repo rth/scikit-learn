@@ -303,11 +303,11 @@ def test_precision():
             # check impurity
             for finding in finditer(pattern, dot_data):
                 assert (len(search(r"\.\d+", finding.group()).group()) ==
-                             precision + 1)
+                        precision + 1)
             # check threshold
             for finding in finditer(r"<= \d+\.\d+", dot_data):
                 assert (len(search(r"\.\d+", finding.group()).group()) ==
-                             precision + 1)
+                        precision + 1)
 
 
 def test_export_text_errors():

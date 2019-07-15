@@ -394,6 +394,7 @@ class MeanShift(BaseEstimator, ClusterMixin):
     Machine Intelligence. 2002. pp. 603-619.
 
     """
+
     def __init__(self, bandwidth=None, seeds=None, bin_seeding=False,
                  min_bin_freq=1, cluster_all=True, n_jobs=None):
         self.bandwidth = bandwidth

@@ -115,6 +115,7 @@ class RFE(BaseEstimator, MetaEstimatorMixin, SelectorMixin):
            for cancer classification using support vector machines",
            Mach. Learn., 46(1-3), 389--422, 2002.
     """
+
     def __init__(self, estimator, n_features_to_select=None, step=1,
                  verbose=0):
         self.estimator = estimator
@@ -450,6 +451,7 @@ class RFECV(RFE, MetaEstimatorMixin):
            for cancer classification using support vector machines",
            Mach. Learn., 46(1-3), 389--422, 2002.
     """
+
     def __init__(self, estimator, step=1, min_features_to_select=1, cv=None,
                  scoring=None, verbose=0, n_jobs=None):
         self.estimator = estimator

@@ -119,7 +119,6 @@ def test_pls():
     assert_array_almost_equal(np.abs(x_rotations_sign_flip), 1, 4)
     assert_array_almost_equal(np.abs(x_weights_sign_flip), 1, 4)
 
-
     assert_array_almost_equal(y_rotations_sign_flip, y_weights_sign_flip)
     assert_array_almost_equal(np.abs(y_rotations_sign_flip), 1, 4)
     assert_array_almost_equal(np.abs(y_weights_sign_flip), 1, 4)
@@ -200,7 +199,6 @@ def test_pls():
          [0.05584937, -0.02028961, -0.57682568],
          [0.05744254, -0.01482333, -0.17431274]])
     x_weights_sign_flip = pls_ca.x_weights_ / x_weights
-
 
     x_loadings = np.array(
         [[0.65649254,  0.1847647,  0.15270699],
@@ -307,8 +305,10 @@ def test_predict_transform_copy():
     Y_copy = Y.copy()
     clf.fit(X, Y)
     # check that results are identical with copy
-    assert_array_almost_equal(clf.predict(X), clf.predict(X.copy(), copy=False))
-    assert_array_almost_equal(clf.transform(X), clf.transform(X.copy(), copy=False))
+    assert_array_almost_equal(clf.predict(
+        X), clf.predict(X.copy(), copy=False))
+    assert_array_almost_equal(clf.transform(
+        X), clf.transform(X.copy(), copy=False))
 
     # check also if passing Y
     assert_array_almost_equal(clf.transform(X, Y),

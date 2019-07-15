@@ -11,7 +11,6 @@ from sklearn.utils.testing import SkipTest
 from functools import partial
 
 
-
 def test_percent10():
     try:
         data = fetch_kddcup99(download_if_missing=False)
