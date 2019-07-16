@@ -53,6 +53,8 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
 from sklearn.metrics import zero_one_loss
+from sklearn.metrics import gini_coefficient_score
+from sklearn.metrics import normalized_gini_coefficient_score
 
 from sklearn.metrics.base import _average_binary_score
 
@@ -97,6 +99,8 @@ REGRESSION_METRICS = {
     "median_absolute_error": median_absolute_error,
     "explained_variance_score": explained_variance_score,
     "r2_score": partial(r2_score, multioutput='variance_weighted'),
+    "gini_coefficient_score": gini_coefficient_score,
+    "normalized_gini_coefficient_score": normalized_gini_coefficient_score
 }
 
 CLASSIFICATION_METRICS = {

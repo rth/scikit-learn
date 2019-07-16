@@ -1005,9 +1005,7 @@ def lorenz_curve(y_true, y_score, sample_weight=None, normalized=False):
 
     See also
     --------
-
     roc_curve : Compute Receiver operating characteristic (ROC) curve
-
 
     Examples
     --------
@@ -1016,8 +1014,19 @@ def lorenz_curve(y_true, y_score, sample_weight=None, normalized=False):
     >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
     >>> lorenz_curve(y_true, y_scores)
-    (array([1., 2., 3., 4.]), array([5.4, 7.4, 9.9, 9.9]))
+    (array([0., 1., 2., 3., 4.]), array([0. , 5.4, 7.4, 9.9, 9.9]))
     """
+    y_true = check_array(y_true, ensure_2d=False)
+    y_score = check_array(y_score, ensure_2d=False)
+
+    check_consistent_length(y_true, y_score)
+
+    if sample_weight is not None:
+        sample_weight = check_array(sample_weight, ensure_2d=False,
+                                    dtype=[np.float64, np.float32])
+    else:
+        sample_weight = np.ones(y_true.shape)
+
     if np.any(y_true < 0):
         raise ValueError("True responses should be non negative.")
     if np.sum(y_true) == 0:

@@ -135,4 +135,7 @@ __all__ = [
     'v_measure_score',
     'zero_one_loss',
     'brier_score_loss',
+    'gini_coefficient_score',
+    'normalized_gini_coefficient_score',
+    'lorenz_curve'
 ]
