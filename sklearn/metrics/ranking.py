@@ -897,9 +897,7 @@ def gini_coefficient_score(y_true, y_score, sample_weight=None):
 
     See also
     --------
-
     lorenz_curve : Compute Lorenz curve
-
     normalized_gini_coefficient_score: Normalized Gini coefficient
 
     Examples
@@ -910,11 +908,10 @@ def gini_coefficient_score(y_true, y_score, sample_weight=None):
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
     >>> gini_coefficient_score(y_true, y_scores)
     0.19823232323232332
-
     """
-    cumulative_observations, cumulative_responses = \
-        lorenz_curve(y_true, y_score, sample_weight=sample_weight,
-                      normalized=True)
+    cumulative_observations, cumulative_responses = lorenz_curve(
+        y_true, y_score, sample_weight=sample_weight, normalized=True
+    )
     gini_coefficient = auc(cumulative_observations, cumulative_responses) - 0.5
     return gini_coefficient
 
@@ -961,7 +958,7 @@ def normalized_gini_coefficient_score(y_true, y_score, sample_weight=None):
     >>> y_true = np.array([0.0, 2.0, 2.5, 5.4])
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
     >>> normalized_gini_coefficient_score(y_true, y_scores)
-    0.9401197604790423
+    0.940...
 
     """
     gini_index = gini_coefficient_score(y_true, y_score,
@@ -1020,8 +1017,6 @@ def lorenz_curve(y_true, y_score, sample_weight=None, normalized=False):
     >>> y_scores = np.array([0.1, 0.4, 0.35, 0.8])
     >>> lorenz_curve(y_true, y_scores)
     (array([1., 2., 3., 4.]), array([5.4, 7.4, 9.9, 9.9]))
-
-
     """
     if np.any(y_true < 0):
         raise ValueError("True responses should be non negative.")
@@ -1037,7 +1032,11 @@ def lorenz_curve(y_true, y_score, sample_weight=None, normalized=False):
     cumulative_responses = np.r_[0, np.cumsum(y_true)]
 
     if normalized is True:
-        cumulative_observations = 1.0 * cumulative_observations / cumulative_observations[-1]
-        cumulative_responses = 1.0 * cumulative_responses / cumulative_responses[-1]
+        cumulative_observations = (
+            cumulative_observations / cumulative_observations[-1]
+        )
+        cumulative_responses = (
+            cumulative_responses / cumulative_responses[-1]
+        )
 
     return cumulative_observations, cumulative_responses
