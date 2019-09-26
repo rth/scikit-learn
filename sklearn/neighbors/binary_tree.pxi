@@ -464,13 +464,13 @@ cdef DTYPE_t logVn(ITYPE_t n) nogil:
     return 0.5 * n * LOG_PI - lgamma(0.5 * n + 1)
 
 
-cdef DTYPE_t logSn(ITYPE_t n) ngil:
+cdef DTYPE_t logSn(ITYPE_t n) nogil:
     """V_(n+1) = int_0^1 S_n r^n dr"""
     return LOG_2PI + logVn(n - 1)
 
 
 cdef DTYPE_t _log_kernel_norm(DTYPE_t h, ITYPE_t d,
-                              KernelType kernel) except -1:
+                              KernelType kernel) nogil except -1:
     """Given a KernelType enumeration, compute the kernel normalization.
 
     h is the bandwidth, d is the dimension.
@@ -496,7 +496,8 @@ cdef DTYPE_t _log_kernel_norm(DTYPE_t h, ITYPE_t d,
             tmp *= -(d - k) * (d - k - 1) * (2. / PI) ** 2
         factor = log(factor) + logSn(d - 1)
     else:
-        raise ValueError("Kernel code not recognized")
+        with gil:
+            raise ValueError("Kernel code not recognized")
     return -factor - d * log(h)
 
 
@@ -738,7 +739,7 @@ cdef int _simultaneous_sort(DTYPE_t* dist, ITYPE_t* idx,
 cdef ITYPE_t find_node_split_dim(DTYPE_t* data,
                                  ITYPE_t* node_indices,
                                  ITYPE_t n_features,
-                                 ITYPE_t n_points) except -1:
+                                 ITYPE_t n_points) nogil except -1:
     """Find the dimension with the largest spread.
 
     Parameters
@@ -893,10 +894,9 @@ cdef class NodeHeap:
         cdef NodeHeapData_t *new_data_ptr
         cdef ITYPE_t i
         cdef ITYPE_t size = self.data.shape[0]
-        cdef np.ndarray new_data_arr = np.zeros(new_size,
-                                                dtype=NodeHeapData)
-        cdef NodeHeapData_t[::1] new_data =\
-                                    get_memview_NodeHeapData_1D(new_data_arr)
+        cdef np.ndarray new_data_arr = np.zeros(new_size, dtype=NodeHeapData)
+        cdef NodeHeapData_t[::1] new_data = \
+                get_memview_NodeHeapData_1D(new_data_arr)
 
         if size > 0 and new_size > 0:
             data_ptr = &self.data[0]
@@ -911,13 +911,14 @@ cdef class NodeHeap:
         self.data_arr = new_data_arr
         return 0
 
-    cdef int push(self, NodeHeapData_t data) except -1:
+    cdef int push(self, NodeHeapData_t data) nogil except -1:
         """Push a new item onto the heap"""
         cdef ITYPE_t i, i_parent
         cdef NodeHeapData_t* data_arr
         self.n += 1
         if self.n > self.data.shape[0]:
-            self.resize(2 * self.n)
+            with gil:
+                self.resize(2 * self.n)
 
         # put the new element at the end,
         # and then perform swaps until the heap is in order
@@ -934,14 +935,15 @@ cdef class NodeHeap:
                 i = i_parent
         return 0
 
-    cdef NodeHeapData_t peek(self):
+    cdef NodeHeapData_t peek(self) nogil:
         """Peek at the root of the heap, without removing it"""
         return self.data[0]
 
-    cdef NodeHeapData_t pop(self):
+    cdef NodeHeapData_t pop(self) nogil:
         """Remove the root of the heap, and update the remaining nodes"""
         if self.n == 0:
-            raise ValueError('cannot pop on empty heap')
+            with gil:
+                raise ValueError('cannot pop on empty heap')
 
         cdef ITYPE_t i, i_child1, i_child2, i_swap
         cdef NodeHeapData_t* data_arr = &self.data[0]
@@ -977,7 +979,7 @@ cdef class NodeHeap:
 
         return popped_element
 
-    cdef void clear(self):
+    cdef void clear(self) nogil:
         """Clear the heap"""
         self.n = 0
 
@@ -1206,7 +1208,7 @@ cdef class BinaryTree:
             return self.dist_metric.rdist(x1, x2, size)
 
     cdef int _recursive_build(self, ITYPE_t i_node, ITYPE_t idx_start,
-                              ITYPE_t idx_end) except -1:
+                              ITYPE_t idx_end) nogil except -1:
         """Recursively build the tree.
 
         Parameters
@@ -1233,16 +1235,18 @@ cdef class BinaryTree:
                 # this shouldn't happen if our memory allocation is correct
                 # we'll proactively prevent memory errors, but raise a
                 # warning saying we're doing so.
-                import warnings
-                warnings.warn("Internal: memory layout is flawed: "
-                              "not enough nodes allocated")
+                with gil:
+                    import warnings
+                    warnings.warn("Internal: memory layout is flawed: "
+                                  "not enough nodes allocated")
 
         elif idx_end - idx_start < 2:
             # again, this shouldn't happen if our memory allocation
             # is correct.  Raise a warning.
-            import warnings
-            warnings.warn("Internal: memory layout is flawed: "
-                          "too many nodes allocated")
+            with gil:
+                import warnings
+                warnings.warn("Internal: memory layout is flawed: "
+                              "too many nodes allocated")
             self.node_data[i_node].is_leaf = True
 
         else:
@@ -1663,34 +1667,36 @@ cdef class BinaryTree:
             node_log_min_bounds = get_memview_DTYPE_1D(node_log_min_bounds_arr)
             node_bound_widths_arr = np.zeros(self.n_nodes)
             node_bound_widths = get_memview_DTYPE_1D(node_bound_widths_arr)
-            for i in range(Xarr.shape[0]):
-                log_density[i] = self._kde_single_breadthfirst(
-                                            pt, kernel_c, h_c,
-                                            log_knorm, log_atol, log_rtol,
-                                            nodeheap,
-                                            &node_log_min_bounds[0],
-                                            &node_bound_widths[0])
-                pt += n_features
+            with nogil:
+                for i in range(Xarr.shape[0]):
+                    log_density[i] = self._kde_single_breadthfirst(
+                                                pt, kernel_c, h_c,
+                                                log_knorm, log_atol, log_rtol,
+                                                nodeheap,
+                                                &node_log_min_bounds[0],
+                                                &node_bound_widths[0])
+                    pt += n_features
         else:
-            for i in range(Xarr.shape[0]):
-                min_max_dist(self, 0, pt, &dist_LB, &dist_UB)
-                # compute max & min bounds on density within top node
-                log_min_bound = (log(self.sum_weight) +
-                                 compute_log_kernel(dist_UB,
-                                                    h_c, kernel_c))
-                log_max_bound = (log(self.sum_weight) +
-                                 compute_log_kernel(dist_LB,
-                                                    h_c, kernel_c))
-                log_bound_spread = logsubexp(log_max_bound, log_min_bound)
-                self._kde_single_depthfirst(0, pt, kernel_c, h_c,
-                                            log_knorm, log_atol, log_rtol,
-                                            log_min_bound,
-                                            log_bound_spread,
-                                            &log_min_bound,
-                                            &log_bound_spread)
-                log_density[i] = logaddexp(log_min_bound,
-                                           log_bound_spread - log(2))
-                pt += n_features
+            with nogil:
+                for i in range(Xarr.shape[0]):
+                    min_max_dist(self, 0, pt, &dist_LB, &dist_UB)
+                    # compute max & min bounds on density within top node
+                    log_min_bound = (log(self.sum_weight) +
+                                     compute_log_kernel(dist_UB,
+                                                        h_c, kernel_c))
+                    log_max_bound = (log(self.sum_weight) +
+                                     compute_log_kernel(dist_LB,
+                                                        h_c, kernel_c))
+                    log_bound_spread = logsubexp(log_max_bound, log_min_bound)
+                    self._kde_single_depthfirst(0, pt, kernel_c, h_c,
+                                                log_knorm, log_atol, log_rtol,
+                                                log_min_bound,
+                                                log_bound_spread,
+                                                &log_min_bound,
+                                                &log_bound_spread)
+                    log_density[i] = logaddexp(log_min_bound,
+                                               log_bound_spread - log(2))
+                    pt += n_features
 
         # normalize the results
         for i in range(log_density.shape[0]):
@@ -1820,7 +1826,7 @@ cdef class BinaryTree:
     cdef int _query_single_breadthfirst(self, DTYPE_t* pt,
                                         ITYPE_t i_pt,
                                         NeighborsHeap heap,
-                                        NodeHeap nodeheap) except -1:
+                                        NodeHeap nodeheap) nogil except -1:
         """Non-recursive single-tree k-neighbors query, breadth-first search"""
         cdef ITYPE_t i, i_node
         cdef DTYPE_t dist_pt, reduced_dist_LB
@@ -1871,7 +1877,7 @@ cdef class BinaryTree:
                                     BinaryTree other, ITYPE_t i_node2,
                                     DTYPE_t[::1] bounds,
                                     NeighborsHeap heap,
-                                    DTYPE_t reduced_dist_LB) except -1:
+                                    DTYPE_t reduced_dist_LB) nogil except -1:
         """Recursive dual-tree k-neighbors query, depth-first"""
         # note that the array `bounds` is maintained such that
         # bounds[i] is the largest distance among any of the
@@ -1990,68 +1996,70 @@ cdef class BinaryTree:
         nodeheap_item.i2 = 0
         nodeheap.push(nodeheap_item)
 
-        while nodeheap.n > 0:
-            nodeheap_item = nodeheap.pop()
-            reduced_dist_LB = nodeheap_item.val
-            i_node1 = nodeheap_item.i1
-            i_node2 = nodeheap_item.i2
+        with nogil:
+            while nodeheap.n > 0:
+                nodeheap_item = nodeheap.pop()
+                reduced_dist_LB = nodeheap_item.val
+                i_node1 = nodeheap_item.i1
+                i_node2 = nodeheap_item.i2
 
-            node_info1 = node_data1[i_node1]
-            node_info2 = node_data2[i_node2]
+                node_info1 = node_data1[i_node1]
+                node_info2 = node_data2[i_node2]
 
-            #------------------------------------------------------------
-            # Case 1: nodes are further apart than the current bound:
-            #         trim both from the query
-            if reduced_dist_LB > bounds[i_node2]:
-                pass
+                #------------------------------------------------------------
+                # Case 1: nodes are further apart than the current bound:
+                #         trim both from the query
+                if reduced_dist_LB > bounds[i_node2]:
+                    pass
 
-            #------------------------------------------------------------
-            # Case 2: both nodes are leaves:
-            #         do a brute-force search comparing all pairs
-            elif node_info1.is_leaf and node_info2.is_leaf:
-                bounds[i_node2] = -1
+                #------------------------------------------------------------
+                # Case 2: both nodes are leaves:
+                #         do a brute-force search comparing all pairs
+                elif node_info1.is_leaf and node_info2.is_leaf:
+                    bounds[i_node2] = -1
 
-                for i2 in range(node_info2.idx_start, node_info2.idx_end):
-                    i_pt = other.idx_array[i2]
+                    for i2 in range(node_info2.idx_start, node_info2.idx_end):
+                        i_pt = other.idx_array[i2]
 
-                    if heap.largest(i_pt) <= reduced_dist_LB:
-                        continue
+                        if heap.largest(i_pt) <= reduced_dist_LB:
+                            continue
 
-                    for i1 in range(node_info1.idx_start, node_info1.idx_end):
-                        dist_pt = self.rdist(
-                            data1 + n_features * self.idx_array[i1],
-                            data2 + n_features * i_pt,
-                            n_features)
-                        if dist_pt < heap.largest(i_pt):
-                            heap._push(i_pt, dist_pt, self.idx_array[i1])
+                        for i1 in range(node_info1.idx_start,
+                                        node_info1.idx_end):
+                            dist_pt = self.rdist(
+                                data1 + n_features * self.idx_array[i1],
+                                data2 + n_features * i_pt,
+                                n_features)
+                            if dist_pt < heap.largest(i_pt):
+                                heap._push(i_pt, dist_pt, self.idx_array[i1])
 
-                    # keep track of node bound
-                    bounds[i_node2] = fmax(bounds[i_node2],
-                                           heap.largest(i_pt))
+                        # keep track of node bound
+                        bounds[i_node2] = fmax(bounds[i_node2],
+                                               heap.largest(i_pt))
 
-            #------------------------------------------------------------
-            # Case 3a: node 1 is a leaf or is smaller: split node 2 and
-            #          recursively query, starting with the nearest subnode
-            elif node_info1.is_leaf or (not node_info2.is_leaf
-                                        and (node_info2.radius
-                                             > node_info1.radius)):
-                nodeheap_item.i1 = i_node1
-                for i2 in range(2 * i_node2 + 1, 2 * i_node2 + 3):
-                    nodeheap_item.i2 = i2
-                    nodeheap_item.val = min_rdist_dual(self, i_node1,
-                                                       other, i2)
-                    nodeheap.push(nodeheap_item)
+                #------------------------------------------------------------
+                # Case 3a: node 1 is a leaf or is smaller: split node 2 and
+                #          recursively query, starting with the nearest subnode
+                elif node_info1.is_leaf or (not node_info2.is_leaf
+                                            and (node_info2.radius
+                                                 > node_info1.radius)):
+                    nodeheap_item.i1 = i_node1
+                    for i2 in range(2 * i_node2 + 1, 2 * i_node2 + 3):
+                        nodeheap_item.i2 = i2
+                        nodeheap_item.val = min_rdist_dual(self, i_node1,
+                                                           other, i2)
+                        nodeheap.push(nodeheap_item)
 
-            #------------------------------------------------------------
-            # Case 3b: node 2 is a leaf or is smaller: split node 1 and
-            #          recursively query, starting with the nearest subnode
-            else:
-                nodeheap_item.i2 = i_node2
-                for i1 in range(2 * i_node1 + 1, 2 * i_node1 + 3):
-                    nodeheap_item.i1 = i1
-                    nodeheap_item.val = min_rdist_dual(self, i1,
-                                                       other, i_node2)
-                    nodeheap.push(nodeheap_item)
+                #------------------------------------------------------------
+                # Case 3b: node 2 is a leaf or is smaller: split node 1 and
+                #          recursively query, starting with the nearest subnode
+                else:
+                    nodeheap_item.i2 = i_node2
+                    for i1 in range(2 * i_node1 + 1, 2 * i_node1 + 3):
+                        nodeheap_item.i1 = i1
+                        nodeheap_item.val = min_rdist_dual(self, i1,
+                                                           other, i_node2)
+                        nodeheap.push(nodeheap_item)
         return 0
 
     cdef ITYPE_t _query_radius_single(self,
@@ -2136,7 +2144,8 @@ cdef class BinaryTree:
                                           DTYPE_t log_atol, DTYPE_t log_rtol,
                                           NodeHeap nodeheap,
                                           DTYPE_t* node_log_min_bounds,
-                                          DTYPE_t* node_log_bound_spreads):
+                                          DTYPE_t* node_log_bound_spreads
+                                          ) nogil:
         """non-recursive single-tree kernel density estimation"""
         # For the given point, node_log_min_bounds and node_log_bound_spreads
         # will encode the current bounds on the density between the point
@@ -2603,7 +2612,7 @@ def nodeheap_sort(DTYPE_t[::1] vals):
     return np.asarray(vals_sorted), np.asarray(indices)
 
 # Reimplementation for MSVC support
-cdef inline double fmin(double a, double b):
+cdef inline double fmin(double a, double b) nogil:
     return min(a, b)
 
 cdef inline double fmax(double a, double b) nogil:
