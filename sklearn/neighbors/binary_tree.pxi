@@ -362,7 +362,7 @@ Compute a two-point auto-correlation function
 
 ######################################################################
 # Utility functions
-cdef DTYPE_t logaddexp(DTYPE_t x1, DTYPE_t x2):
+cdef DTYPE_t logaddexp(DTYPE_t x1, DTYPE_t x2) nogil:
     """logaddexp(x1, x2) -> log(exp(x1) + exp(x2))"""
     cdef DTYPE_t a = fmax(x1, x2)
     if a == NEG_INF:
@@ -370,7 +370,7 @@ cdef DTYPE_t logaddexp(DTYPE_t x1, DTYPE_t x2):
     else:
         return a + log(exp(x1 - a) + exp(x2 - a))
 
-cdef DTYPE_t logsubexp(DTYPE_t x1, DTYPE_t x2):
+cdef DTYPE_t logsubexp(DTYPE_t x1, DTYPE_t x2) nogil:
     """logsubexp(x1, x2) -> log(exp(x1) - exp(x2))"""
     if x1 <= x2:
         return NEG_INF
@@ -397,12 +397,12 @@ cdef enum KernelType:
     COSINE_KERNEL = 6
 
 
-cdef inline DTYPE_t log_gaussian_kernel(DTYPE_t dist, DTYPE_t h):
+cdef inline DTYPE_t log_gaussian_kernel(DTYPE_t dist, DTYPE_t h) nogil:
     """log of the gaussian kernel for bandwidth h (unnormalized)"""
     return -0.5 * (dist * dist) / (h * h)
 
 
-cdef inline DTYPE_t log_tophat_kernel(DTYPE_t dist, DTYPE_t h):
+cdef inline DTYPE_t log_tophat_kernel(DTYPE_t dist, DTYPE_t h) nogil:
     """log of the tophat kernel for bandwidth h (unnormalized)"""
     if dist < h:
         return 0.0
@@ -410,7 +410,7 @@ cdef inline DTYPE_t log_tophat_kernel(DTYPE_t dist, DTYPE_t h):
         return NEG_INF
 
 
-cdef inline DTYPE_t log_epanechnikov_kernel(DTYPE_t dist, DTYPE_t h):
+cdef inline DTYPE_t log_epanechnikov_kernel(DTYPE_t dist, DTYPE_t h) nogil:
     """log of the epanechnikov kernel for bandwidth h (unnormalized)"""
     if dist < h:
         return log(1.0 - (dist * dist) / (h * h))
@@ -418,12 +418,12 @@ cdef inline DTYPE_t log_epanechnikov_kernel(DTYPE_t dist, DTYPE_t h):
         return NEG_INF
 
 
-cdef inline DTYPE_t log_exponential_kernel(DTYPE_t dist, DTYPE_t h):
+cdef inline DTYPE_t log_exponential_kernel(DTYPE_t dist, DTYPE_t h) nogil:
     """log of the exponential kernel for bandwidth h (unnormalized)"""
     return -dist / h
 
 
-cdef inline DTYPE_t log_linear_kernel(DTYPE_t dist, DTYPE_t h):
+cdef inline DTYPE_t log_linear_kernel(DTYPE_t dist, DTYPE_t h) nogil:
     """log of the linear kernel for bandwidth h (unnormalized)"""
     if dist < h:
         return log(1 - dist / h)
@@ -431,7 +431,7 @@ cdef inline DTYPE_t log_linear_kernel(DTYPE_t dist, DTYPE_t h):
         return NEG_INF
 
 
-cdef inline DTYPE_t log_cosine_kernel(DTYPE_t dist, DTYPE_t h):
+cdef inline DTYPE_t log_cosine_kernel(DTYPE_t dist, DTYPE_t h) nogil:
     """log of the cosine kernel for bandwidth h (unnormalized)"""
     if dist < h:
         return log(cos(0.5 * PI * dist / h))
@@ -440,7 +440,7 @@ cdef inline DTYPE_t log_cosine_kernel(DTYPE_t dist, DTYPE_t h):
 
 
 cdef inline DTYPE_t compute_log_kernel(DTYPE_t dist, DTYPE_t h,
-                                       KernelType kernel):
+                                       KernelType kernel) nogil:
     """Given a KernelType enumeration, compute the appropriate log-kernel"""
     if kernel == GAUSSIAN_KERNEL:
         return log_gaussian_kernel(dist, h)
@@ -459,12 +459,12 @@ cdef inline DTYPE_t compute_log_kernel(DTYPE_t dist, DTYPE_t h,
 #------------------------------------------------------------
 # Kernel norms are defined via the volume element V_n
 # and surface element S_(n-1) of an n-sphere.
-cdef DTYPE_t logVn(ITYPE_t n):
+cdef DTYPE_t logVn(ITYPE_t n) nogil:
     """V_n = pi^(n/2) / gamma(n/2 - 1)"""
     return 0.5 * n * LOG_PI - lgamma(0.5 * n + 1)
 
 
-cdef DTYPE_t logSn(ITYPE_t n):
+cdef DTYPE_t logSn(ITYPE_t n) ngil:
     """V_(n+1) = int_0^1 S_n r^n dr"""
     return LOG_2PI + logVn(n - 1)
 
@@ -544,23 +544,17 @@ def kernel_norm(h, d, kernel, return_log=False):
 
 ######################################################################
 # Tree Utility Routines
-cdef inline void swap(DITYPE_t* arr, ITYPE_t i1, ITYPE_t i2):
+cdef inline void swap(DITYPE_t* arr, ITYPE_t i1, ITYPE_t i2) nogil:
     """swap the values at index i1 and i2 of arr"""
-    cdef DITYPE_t tmp = arr[i1]
-    arr[i1] = arr[i2]
-    arr[i2] = tmp
+    arr[i1], arr[i2] = arr[i2], arr[i1]
 
 
 cdef inline void dual_swap(DTYPE_t* darr, ITYPE_t* iarr,
                            ITYPE_t i1, ITYPE_t i2) nogil:
     """swap the values at inex i1 and i2 of both darr and iarr"""
-    cdef DTYPE_t dtmp = darr[i1]
-    darr[i1] = darr[i2]
-    darr[i2] = dtmp
+    darr[i1], darr[i2] = darr[i2], darr[i1]
 
-    cdef ITYPE_t itmp = iarr[i1]
-    iarr[i1] = iarr[i2]
-    iarr[i2] = itmp
+    iarr[i1], iarr[i2] = iarr[i2], iarr[i1]
 
 
 cdef class NeighborsHeap:
@@ -664,7 +658,7 @@ cdef class NeighborsHeap:
 
         return 0
 
-    cdef int _sort(self) except -1:
+    cdef int _sort(self) nogil except -1:
         """simultaneously sort the distances and indices"""
         cdef DTYPE_t[:, ::1] distances = self.distances
         cdef ITYPE_t[:, ::1] indices = self.indices
@@ -796,7 +790,7 @@ cdef int partition_node_indices(DTYPE_t* data,
                                 ITYPE_t split_dim,
                                 ITYPE_t split_index,
                                 ITYPE_t n_features,
-                                ITYPE_t n_points) except -1:
+                                ITYPE_t n_points) nogil except -1:
     """Partition points in the node into two equal-sized groups.
 
     Upon return, the values in node_indices will be rearranged such that
@@ -861,10 +855,8 @@ cdef int partition_node_indices(DTYPE_t* data,
 ######################################################################
 # NodeHeap : min-heap used to keep track of nodes during
 #            breadth-first query
-cdef inline void swap_nodes(NodeHeapData_t* arr, ITYPE_t i1, ITYPE_t i2):
-    cdef NodeHeapData_t tmp = arr[i1]
-    arr[i1] = arr[i2]
-    arr[i2] = tmp
+cdef inline void swap_nodes(NodeHeapData_t* arr, ITYPE_t i1, ITYPE_t i2) nogil:
+    arr[i1], arr[i2] = arr[i2], arr[i1]
 
 
 cdef class NodeHeap:
@@ -2236,7 +2228,7 @@ cdef class BinaryTree:
                                         n_features)
                     log_density = compute_log_kernel(dist_pt, h, kernel)
                     if with_sample_weight:
-                        log_weight = np.log(sample_weight[idx_array[i]])
+                        log_weight = log(sample_weight[idx_array[i]])
                     else:
                         log_weight = 0.
                     global_log_min_bound = logaddexp(global_log_min_bound,
@@ -2310,7 +2302,7 @@ cdef class BinaryTree:
                    DTYPE_t local_log_min_bound,
                    DTYPE_t local_log_bound_spread,
                    DTYPE_t* global_log_min_bound,
-                   DTYPE_t* global_log_bound_spread) except -1:
+                   DTYPE_t* global_log_bound_spread) nogil except -1:
         """recursive single-tree kernel density estimate, depth-first"""
         # For the given point, local_min_bound and local_max_bound give the
         # minimum and maximum density for the current node, while
@@ -2371,7 +2363,7 @@ cdef class BinaryTree:
                                     n_features)
                 log_dens_contribution = compute_log_kernel(dist_pt, h, kernel)
                 if with_sample_weight:
-                    log_weight = np.log(sample_weight[idx_array[i]])
+                    log_weight = log(sample_weight[idx_array[i]])
                 else:
                     log_weight = 0.
                 global_log_min_bound[0] = logaddexp(global_log_min_bound[0],
@@ -2620,7 +2612,7 @@ cdef inline double fmax(double a, double b) nogil:
 cdef inline DTYPE_t _total_node_weight(NodeData_t* node_data,
                                        DTYPE_t* sample_weight,
                                        ITYPE_t* idx_array,
-                                       ITYPE_t i_node):
+                                       ITYPE_t i_node) nogil:
     cdef ITYPE_t i
     cdef DTYPE_t N = 0.0
     for i in range(node_data[i_node].idx_start, node_data[i_node].idx_end):
