@@ -14,6 +14,7 @@ from ..base import RegressorMixin
 from ..utils.extmath import fast_logdet
 from ..utils import check_X_y
 from ..utils.fixes import pinvh
+from ..utils.validation import _check_sample_weight
 
 
 ###############################################################################
@@ -195,6 +196,8 @@ class BayesianRidge(RegressorMixin, LinearModel):
             sample_weight=sample_weight)
 
         if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, X,
+                                                 dtype=X.dtype)
             # Sample weight can be implemented via a simple rescaling.
             X, y = _rescale_data(X, y, sample_weight)
 

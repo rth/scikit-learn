@@ -35,6 +35,7 @@ from ..utils.fixes import sparse_lsqr
 from ..utils.seq_dataset import ArrayDataset32, CSRDataset32
 from ..utils.seq_dataset import ArrayDataset64, CSRDataset64
 from ..utils.validation import check_is_fitted
+from ..utils.validation import _check_sample_weight
 from ..preprocessing.data import normalize as f_normalize
 
 # TODO: bayesian_ridge_regression and bayesian_regression_ard
@@ -181,13 +182,21 @@ def _preprocess_data(X, y, fit_intercept, normalize=False, copy=True,
 def _rescale_data(X, y, sample_weight):
     """Rescale data so as to support sample_weight"""
     n_samples = X.shape[0]
-    sample_weight = np.full(n_samples, sample_weight,
-                            dtype=np.array(sample_weight).dtype)
+    if sample_weight.shape != (X.shape[0],):
+        raise ValueError('sample_weight of shape {}, expected ({},)'
+                         .format(sample_weight.shape, X.shape[0]))
     sample_weight = np.sqrt(sample_weight)
-    sw_matrix = sparse.dia_matrix((sample_weight, 0),
-                                  shape=(n_samples, n_samples))
-    X = safe_sparse_dot(sw_matrix, X)
-    y = safe_sparse_dot(sw_matrix, y)
+    if sp.issparse(X):
+        sw_matrix = sparse.dia_matrix((sample_weight, 0),
+                                      shape=(n_samples, n_samples))
+        X = safe_sparse_dot(sw_matrix, X)
+    else:
+        X = X * sample_weight[:, None]
+
+    if y.ndim == 1:
+        y = y * sample_weight
+    else:
+        y = y * sample_weight[:, None]
     return X, y
 
 
@@ -476,6 +485,8 @@ class LinearRegression(MultiOutputMixin, RegressorMixin, LinearModel):
             return_mean=True)
 
         if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, X,
+                                                 dtype=X.dtype)
             # Sample weight can be implemented via a simple rescaling.
             X, y = _rescale_data(X, y, sample_weight)
 

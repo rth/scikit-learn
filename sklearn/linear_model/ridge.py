@@ -1449,6 +1449,8 @@ class _RidgeGCV(LinearModel):
                 solve = self._solve_svd_design_matrix
 
         if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, X,
+                                                 dtype=X.dtype)
             X, y = _rescale_data(X, y, sample_weight)
             sqrt_sw = np.sqrt(sample_weight)
         else:
