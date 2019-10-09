@@ -63,48 +63,6 @@ def test_ball_tree_query_metrics(metric):
     assert_array_almost_equal(dist1, dist2)
 
 
-def compute_kernel_slow(Y, X, kernel, h):
-    d = np.sqrt(((Y[:, None, :] - X) ** 2).sum(-1))
-    norm = kernel_norm(h, X.shape[1], kernel)
-
-    if kernel == 'gaussian':
-        return norm * np.exp(-0.5 * (d * d) / (h * h)).sum(-1)
-    elif kernel == 'tophat':
-        return norm * (d < h).sum(-1)
-    elif kernel == 'epanechnikov':
-        return norm * ((1.0 - (d * d) / (h * h)) * (d < h)).sum(-1)
-    elif kernel == 'exponential':
-        return norm * (np.exp(-d / h)).sum(-1)
-    elif kernel == 'linear':
-        return norm * ((1 - d / h) * (d < h)).sum(-1)
-    elif kernel == 'cosine':
-        return norm * (np.cos(0.5 * np.pi * d / h) * (d < h)).sum(-1)
-    else:
-        raise ValueError('kernel not recognized')
-
-
-@pytest.mark.parametrize("kernel", ['gaussian', 'tophat', 'epanechnikov',
-                                    'exponential', 'linear', 'cosine'])
-@pytest.mark.parametrize("h", [0.01, 0.1, 1])
-@pytest.mark.parametrize("rtol", [0, 1E-5])
-@pytest.mark.parametrize("atol", [1E-6, 1E-2])
-@pytest.mark.parametrize("breadth_first", [True, False])
-def test_ball_tree_kde(kernel, h, rtol, atol, breadth_first, n_samples=100,
-                       n_features=3):
-    rng = np.random.RandomState(0)
-    X = rng.random_sample((n_samples, n_features))
-    Y = rng.random_sample((n_samples, n_features))
-    bt = BallTree(X, leaf_size=10)
-
-    dens_true = compute_kernel_slow(Y, X, kernel, h)
-
-    dens = bt.kernel_density(Y, h, atol=atol, rtol=rtol,
-                             kernel=kernel,
-                             breadth_first=breadth_first)
-    assert_allclose(dens, dens_true,
-                    atol=atol, rtol=max(rtol, 1e-7))
-
-
 def test_gaussian_kde(n_samples=1000):
     # Compare gaussian KDE results to scipy.stats.gaussian_kde
     from scipy.stats import gaussian_kde

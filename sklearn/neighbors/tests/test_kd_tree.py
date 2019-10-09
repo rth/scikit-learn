@@ -4,11 +4,10 @@ from numpy.testing import assert_array_almost_equal
 import pytest
 
 from sklearn.neighbors.kd_tree import (KDTree, NeighborsHeap,
-                                       simultaneous_sort, kernel_norm,
+                                       simultaneous_sort,
                                        nodeheap_sort, DTYPE, ITYPE)
 from sklearn.neighbors.dist_metrics import DistanceMetric
 from sklearn.utils import check_random_state
-from sklearn.utils.testing import assert_allclose
 
 DIMENSION = 3
 
@@ -16,54 +15,6 @@ METRICS = {'euclidean': {},
            'manhattan': {},
            'chebyshev': {},
            'minkowski': dict(p=3)}
-
-
-def compute_kernel_slow(Y, X, kernel, h):
-    d = np.sqrt(((Y[:, None, :] - X) ** 2).sum(-1))
-    norm = kernel_norm(h, X.shape[1], kernel)
-
-    if kernel == 'gaussian':
-        return norm * np.exp(-0.5 * (d * d) / (h * h)).sum(-1)
-    elif kernel == 'tophat':
-        return norm * (d < h).sum(-1)
-    elif kernel == 'epanechnikov':
-        return norm * ((1.0 - (d * d) / (h * h)) * (d < h)).sum(-1)
-    elif kernel == 'exponential':
-        return norm * (np.exp(-d / h)).sum(-1)
-    elif kernel == 'linear':
-        return norm * ((1 - d / h) * (d < h)).sum(-1)
-    elif kernel == 'cosine':
-        return norm * (np.cos(0.5 * np.pi * d / h) * (d < h)).sum(-1)
-    else:
-        raise ValueError('kernel not recognized')
-
-
-def check_results(kernel, h, atol, rtol, breadth_first, Y, kdt, dens_true):
-    dens = kdt.kernel_density(Y, h, atol=atol, rtol=rtol,
-                              kernel=kernel,
-                              breadth_first=breadth_first)
-    assert_allclose(dens, dens_true, atol=atol,
-                    rtol=max(rtol, 1e-7))
-
-
-@pytest.mark.parametrize('kernel',
-                         ['gaussian', 'tophat', 'epanechnikov',
-                          'exponential', 'linear', 'cosine'])
-@pytest.mark.parametrize('h', [0.01, 0.1, 1])
-def test_kd_tree_kde(kernel, h):
-    n_samples, n_features = (100, 3)
-    rng = check_random_state(0)
-    X = rng.random_sample((n_samples, n_features))
-    Y = rng.random_sample((n_samples, n_features))
-    kdt = KDTree(X, leaf_size=10)
-
-    dens_true = compute_kernel_slow(Y, X, kernel, h)
-
-    for rtol in [0, 1E-5]:
-        for atol in [1E-6, 1E-2]:
-            for breadth_first in (True, False):
-                check_results(kernel, h, atol, rtol,
-                              breadth_first, Y, kdt, dens_true)
 
 
 def test_gaussian_kde(n_samples=1000):
