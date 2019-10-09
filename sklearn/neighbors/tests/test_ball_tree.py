@@ -63,45 +63,6 @@ def test_ball_tree_query_metrics(metric):
     assert_array_almost_equal(dist1, dist2)
 
 
-def test_ball_tree_query_radius(n_samples=100, n_features=10):
-    rng = check_random_state(0)
-    X = 2 * rng.random_sample(size=(n_samples, n_features)) - 1
-    query_pt = np.zeros(n_features, dtype=float)
-
-    eps = 1E-15  # roundoff error can cause test to fail
-    bt = BallTree(X, leaf_size=5)
-    rad = np.sqrt(((X - query_pt) ** 2).sum(1))
-
-    for r in np.linspace(rad[0], rad[-1], 100):
-        ind = bt.query_radius([query_pt], r + eps)[0]
-        i = np.where(rad <= r + eps)[0]
-
-        ind.sort()
-        i.sort()
-
-        assert_array_almost_equal(i, ind)
-
-
-def test_ball_tree_query_radius_distance(n_samples=100, n_features=10):
-    rng = check_random_state(0)
-    X = 2 * rng.random_sample(size=(n_samples, n_features)) - 1
-    query_pt = np.zeros(n_features, dtype=float)
-
-    eps = 1E-15  # roundoff error can cause test to fail
-    bt = BallTree(X, leaf_size=5)
-    rad = np.sqrt(((X - query_pt) ** 2).sum(1))
-
-    for r in np.linspace(rad[0], rad[-1], 100):
-        ind, dist = bt.query_radius([query_pt], r + eps, return_distance=True)
-
-        ind = ind[0]
-        dist = dist[0]
-
-        d = np.sqrt(((query_pt - X[ind]) ** 2).sum(1))
-
-        assert_array_almost_equal(d, dist)
-
-
 def compute_kernel_slow(Y, X, kernel, h):
     d = np.sqrt(((Y[:, None, :] - X) ** 2).sum(-1))
     norm = kernel_norm(h, X.shape[1], kernel)
@@ -177,8 +138,6 @@ def test_ball_tree_two_point(n_samples=100, n_features=3):
 
     for dualtree in (True, False):
         check_two_point(r, dualtree)
-
-
 
 
 def test_neighbors_heap(n_pts=5, n_nbrs=10):

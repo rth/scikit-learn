@@ -94,3 +94,39 @@ def test_pickle(Cls, metric, protocol):
     assert_array_almost_equal(dist1, dist2)
 
     assert isinstance(tree2, Cls)
+
+
+@pytest.mark.parametrize('Cls', [KDTree, BallTree])
+@pytest.mark.parametrize('return_distance', [False, True])
+def test_nn_tree_query_radius_distance(Cls, return_distance):
+    n_samples, n_features = 100, 10
+    rng = check_random_state(0)
+    X = 2 * rng.random_sample(size=(n_samples, n_features)) - 1
+    query_pt = np.zeros(n_features, dtype=float)
+
+    eps = 1E-15  # roundoff error can cause test to fail
+    bt = Cls(X, leaf_size=5)
+    rad = np.sqrt(((X - query_pt) ** 2).sum(1))
+
+    for r in np.linspace(rad[0], rad[-1], 100):
+        res = bt.query_radius([query_pt], r + eps,
+                              return_distance=return_distance)
+        if return_distance:
+            assert isinstance(res, tuple)
+            assert len(res) == 2
+            ind, dist = res
+            ind = ind[0]
+            dist = dist[0]
+
+            d = np.sqrt(((query_pt - X[ind]) ** 2).sum(1))
+
+            assert_array_almost_equal(d, dist)
+        else:
+            assert isinstance(res, np.ndarray)
+            ind = res[0]
+            i = np.where(rad <= r + eps)[0]
+
+            ind.sort()
+            i.sort()
+
+            assert_array_almost_equal(i, ind)

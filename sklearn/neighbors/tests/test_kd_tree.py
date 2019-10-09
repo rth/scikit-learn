@@ -18,45 +18,6 @@ METRICS = {'euclidean': {},
            'minkowski': dict(p=3)}
 
 
-def test_kd_tree_query_radius(n_samples=100, n_features=10):
-    rng = check_random_state(0)
-    X = 2 * rng.random_sample(size=(n_samples, n_features)) - 1
-    query_pt = np.zeros(n_features, dtype=float)
-
-    eps = 1E-15  # roundoff error can cause test to fail
-    kdt = KDTree(X, leaf_size=5)
-    rad = np.sqrt(((X - query_pt) ** 2).sum(1))
-
-    for r in np.linspace(rad[0], rad[-1], 100):
-        ind = kdt.query_radius([query_pt], r + eps)[0]
-        i = np.where(rad <= r + eps)[0]
-
-        ind.sort()
-        i.sort()
-
-        assert_array_almost_equal(i, ind)
-
-
-def test_kd_tree_query_radius_distance(n_samples=100, n_features=10):
-    rng = check_random_state(0)
-    X = 2 * rng.random_sample(size=(n_samples, n_features)) - 1
-    query_pt = np.zeros(n_features, dtype=float)
-
-    eps = 1E-15  # roundoff error can cause test to fail
-    kdt = KDTree(X, leaf_size=5)
-    rad = np.sqrt(((X - query_pt) ** 2).sum(1))
-
-    for r in np.linspace(rad[0], rad[-1], 100):
-        ind, dist = kdt.query_radius([query_pt], r + eps, return_distance=True)
-
-        ind = ind[0]
-        dist = dist[0]
-
-        d = np.sqrt(((query_pt - X[ind]) ** 2).sum(1))
-
-        assert_array_almost_equal(d, dist)
-
-
 def compute_kernel_slow(Y, X, kernel, h):
     d = np.sqrt(((Y[:, None, :] - X) ** 2).sum(-1))
     norm = kernel_norm(h, X.shape[1], kernel)
