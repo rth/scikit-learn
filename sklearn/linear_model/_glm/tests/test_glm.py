@@ -315,6 +315,35 @@ def test_normal_ridge_comparison(n_samples, n_features, fit_intercept,
     assert_allclose(glm.predict(X_test), ridge.predict(X_test), rtol=2e-4)
 
 
+@pytest.mark.parametrize('alpha', [1e-8, 0.01, 0.1, 1, 10])
+def test_binomial_glm_with_sample_weight(alpha):
+    """Test elastic net regression with binomial family and LogitLink.
+    Compare to LogisticRegression.
+    """
+    from sklearn.linear_model import LogisticRegression
+    from sklearn._loss.glm_distribution import BinomialDistribution
+    from sklearn.linear_model._glm.link import LogitLink
+    from sklearn.datasets import make_classification
+    n_samples = 500
+
+    rng = np.random.RandomState(42)
+    X, y = make_classification(n_samples=n_samples, n_classes=2, n_features=6,
+                               n_informative=5, n_redundant=0, n_repeated=0,
+                               random_state=rng)
+    sample_weight = np.random.RandomState(0).rand(len(y))
+    log = LogisticRegression(
+        penalty='l2', random_state=rng, fit_intercept=False, tol=1e-6,
+        max_iter=1000, C=1./(sample_weight.sum() * alpha), solver='saga')
+    log.fit(X, y, sample_weight=sample_weight)
+
+    glm = GeneralizedLinearRegressor(
+        family=BinomialDistribution(), link=LogitLink(), fit_intercept=False,
+        alpha=alpha, tol=1e-7)
+    glm.fit(X, y, sample_weight=sample_weight)
+    assert_allclose(log.intercept_[0], glm.intercept_, rtol=5e-5)
+    assert_allclose(log.coef_[0, :], glm.coef_, rtol=5e-5)
+
+
 def test_poisson_glmnet():
     """Compare Poisson regression with L2 regularization and LogLink to glmnet
     """

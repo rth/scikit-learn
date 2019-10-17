@@ -371,6 +371,24 @@ class InverseGaussianDistribution(TweedieDistribution):
         super().__init__(power=3)
 
 
+class BinomialDistribution(ExponentialDispersionModel):
+    """A class for the Binomial distribution.
+    The Binomial distribution is for targets y in [0, 1].
+    """
+    def __init__(self):
+        self._lower_bound = DistributionBoundary(0, inclusive=True)
+
+    def unit_variance(self, mu):
+        return mu * (1 - mu)
+
+    def unit_variance_derivative(self, mu):
+        return 1 - 2 * mu
+
+    def unit_deviance(self, y, mu):
+        from scipy import special
+        return 2 * (special.xlogy(y, y/mu) + special.xlogy(1-y, (1-y)/(1-mu)))
+
+
 EDM_DISTRIBUTIONS = {
     'normal': NormalDistribution,
     'poisson': PoissonDistribution,
