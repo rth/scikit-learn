@@ -113,7 +113,8 @@ def test_sparse_classification():
         X_train_sparse = sparse_format(X_train)
         X_test_sparse = sparse_format(X_test)
         for params in parameter_sets:
-            for f in ['predict', 'predict_proba', 'predict_log_proba', 'decision_function']:
+            for f in ['predict', 'predict_proba', 'predict_log_proba',
+                      'decision_function']:
                 # Trained on sparse format
                 sparse_classifier = BaggingClassifier(
                     base_estimator=CustomSVC(decision_function_shape='ovr'),
@@ -647,9 +648,11 @@ def test_warm_start_equal_n_estimators():
     # modify X to nonsense values, this should not change anything
     X_train += 1.
 
-    assert_warns_message(UserWarning,
-                         "Warm-start fitting without increasing n_estimators does not",
-                         clf.fit, X_train, y_train)
+    assert_warns_message(
+        UserWarning,
+        "Warm-start fitting without increasing n_estimators does not",
+        clf.fit, X_train, y_train
+    )
     assert_array_equal(y_pred, clf.predict(X_test))
 
 

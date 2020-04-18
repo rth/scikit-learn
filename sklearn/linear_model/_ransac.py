@@ -200,7 +200,7 @@ class RANSACRegressor(MetaEstimatorMixin, RegressorMixin,
     .. [1] https://en.wikipedia.org/wiki/RANSAC
     .. [2] https://www.sri.com/sites/default/files/publications/ransac-publication.pdf
     .. [3] http://www.bmva.org/bmvc/2009/Papers/Paper355/Paper355.pdf
-    """
+    """  # noqa
 
     def __init__(self, base_estimator=None, min_samples=None,
                  residual_threshold=None, is_data_valid=None,
@@ -286,16 +286,18 @@ class RANSACRegressor(MetaEstimatorMixin, RegressorMixin,
                 def loss_function(y_true, y_pred): return np.abs(
                     y_true - y_pred)
             else:
-                loss_function = lambda \
-                    y_true, y_pred: np.sum(np.abs(y_true - y_pred), axis=1)
+
+                def loss_function(y_true, y_pred):
+                    return np.sum(np.abs(y_true - y_pred), axis=1)
 
         elif self.loss == "squared_loss":
             if y.ndim == 1:
                 def loss_function(y_true, y_pred): return (
                     y_true - y_pred) ** 2
             else:
-                loss_function = lambda \
-                    y_true, y_pred: np.sum((y_true - y_pred) ** 2, axis=1)
+
+                def loss_function(y_true, y_pred):
+                    return np.sum((y_true - y_pred) ** 2, axis=1)
 
         elif callable(self.loss):
             loss_function = self.loss

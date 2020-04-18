@@ -322,7 +322,8 @@ class OneHotEncoder(_BaseEncoder):
                 return np.zeros(len(self.categories_), dtype=np.object)
             elif self.drop == 'if_binary':
                 return np.array([0 if len(cats) == 2 else None
-                                 for cats in self.categories_], dtype=np.object)
+                                 for cats in self.categories_],
+                                dtype=np.object)
             else:
                 msg = (
                     "Wrong input for parameter `drop`. Expected "

@@ -1203,8 +1203,10 @@ class LinearModelCV(MultiOutputMixin, LinearModel, metaclass=ABCMeta):
             X = self._validate_data(X, accept_sparse='csc',
                                     dtype=[np.float64, np.float32], copy=False)
             if sparse.isspmatrix(X):
-                if (hasattr(reference_to_old_X, "data") and
-                        not np.may_share_memory(reference_to_old_X.data, X.data)):
+                if (
+                    hasattr(reference_to_old_X, "data") and
+                    not np.may_share_memory(reference_to_old_X.data, X.data)
+                ):
                     # X is a sparse matrix and has been copied
                     copy_X = False
             elif not np.may_share_memory(reference_to_old_X, X):

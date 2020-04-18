@@ -295,7 +295,10 @@ def test_check_scoring_gridsearchcv():
 
 def test_make_scorer():
     # Sanity check on the make_scorer factory function.
-    f = lambda *args: 0
+
+    def f(*args):
+        return 0
+
     with pytest.raises(ValueError):
         make_scorer(f, needs_threshold=True, needs_proba=True)
 

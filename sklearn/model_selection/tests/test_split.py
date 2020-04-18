@@ -776,17 +776,17 @@ def test_group_shuffle_split():
         assert slo.get_n_splits(X, y, groups=groups_i) == n_splits
 
         l_unique = np.unique(groups_i)
-        l = np.asarray(groups_i)
+        lg = np.asarray(groups_i)
 
         for train, test in slo.split(X, y, groups=groups_i):
             # First test: no train group is in the test set and vice versa
-            l_train_unique = np.unique(l[train])
-            l_test_unique = np.unique(l[test])
-            assert not np.any(np.in1d(l[train], l_test_unique))
-            assert not np.any(np.in1d(l[test], l_train_unique))
+            l_train_unique = np.unique(lg[train])
+            l_test_unique = np.unique(lg[test])
+            assert not np.any(np.in1d(lg[train], l_test_unique))
+            assert not np.any(np.in1d(lg[test], l_train_unique))
 
             # Second test: train and test add up to all the data
-            assert l[train].size + l[test].size == l.size
+            assert lg[train].size + lg[test].size == lg.size
 
             # Third test: train and test are disjoint
             assert_array_equal(np.intersect1d(train, test), [])

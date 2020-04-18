@@ -194,14 +194,14 @@ def test_ridge_sample_weights():
             W = np.diag(sample_weight)
             if intercept is False:
                 X_aug = X
-                I = np.eye(n_features)
+                Idty = np.eye(n_features)
             else:
                 dummy_column = np.ones(shape=(n_samples, 1))
                 X_aug = np.concatenate((dummy_column, X), axis=1)
-                I = np.eye(n_features + 1)
-                I[0, 0] = 0
+                Idty = np.eye(n_features + 1)
+                Idty[0, 0] = 0
 
-            cf_coefs = linalg.solve(X_aug.T.dot(W).dot(X_aug) + alpha * I,
+            cf_coefs = linalg.solve(X_aug.T.dot(W).dot(X_aug) + alpha * Idty,
                                     X_aug.T.dot(W).dot(y))
 
             if intercept is False:

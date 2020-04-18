@@ -1759,8 +1759,10 @@ def _validate_shuffle_split(n_samples, test_size, train_size,
                          ' than the number of samples {1} or a float in the '
                          '(0, 1) range'.format(test_size, n_samples))
 
-    if (train_size_type == 'i' and (train_size >= n_samples or train_size <= 0)
-            or train_size_type == 'f' and (train_size <= 0 or train_size >= 1)):
+    if (
+        train_size_type == 'i' and (train_size >= n_samples or train_size <= 0)
+        or train_size_type == 'f' and (train_size <= 0 or train_size >= 1)
+    ):
         raise ValueError('train_size={0} should be either positive and smaller'
                          ' than the number of samples {1} or a float in the '
                          '(0, 1) range'.format(train_size, n_samples))

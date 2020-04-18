@@ -633,7 +633,8 @@ def test_mutual_info_classif():
     univariate_filter = SelectPercentile(mutual_info_classif, percentile=40)
     X_r = univariate_filter.fit(X, y).transform(X)
     X_r2 = GenericUnivariateSelect(
-        mutual_info_classif, mode='percentile', param=40).fit(X, y).transform(X)
+        mutual_info_classif, mode='percentile', param=40
+    ).fit(X, y).transform(X)
     assert_array_equal(X_r, X_r2)
     support = univariate_filter.get_support()
     gtruth = np.zeros(5)

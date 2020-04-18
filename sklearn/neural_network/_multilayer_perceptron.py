@@ -352,7 +352,8 @@ class BaseMultilayerPerceptron(BaseEstimator, metaclass=ABCMeta):
             if self.batch_size < 1 or self.batch_size > n_samples:
                 warnings.warn("Got `batch_size` less than 1 or larger than "
                               "sample size. It is going to be clipped")
-            batch_size = np.clip(self.batch_size, 1, n_samples)
+            # TODO: possible bug, batch_size is not used.
+            batch_size = np.clip(self.batch_size, 1, n_samples)  # noqa: F841
 
         # Initialize lists
         activations = [X] + [None] * (len(layer_units) - 1)

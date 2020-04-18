@@ -117,7 +117,7 @@ class _IffHasAttrDescriptor:
                 attrgetter(self.delegate_names[-1])(obj)
 
         # lambda, but not partial, allows help() to work with update_wrapper
-        out = lambda *args, **kwargs: self.fn(obj, *args, **kwargs)
+        out = lambda *args, **kwargs: self.fn(obj, *args, **kwargs)  # noqa
         # update the docstring of the returned function
         update_wrapper(out, self.fn)
         return out

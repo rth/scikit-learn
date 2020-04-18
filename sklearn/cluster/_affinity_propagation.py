@@ -155,14 +155,14 @@ def affinity_propagation(S, preference=None, convergence_iter=15, max_iter=200,
     for it in range(max_iter):
         # tmp = A + S; compute responsibilities
         np.add(A, S, tmp)
-        I = np.argmax(tmp, axis=1)
-        Y = tmp[ind, I]  # np.max(A + S, axis=1)
-        tmp[ind, I] = -np.inf
+        tmp_idx = np.argmax(tmp, axis=1)
+        Y = tmp[ind, tmp_idx]  # np.max(A + S, axis=1)
+        tmp[ind, tmp_idx] = -np.inf
         Y2 = np.max(tmp, axis=1)
 
         # tmp = Rnew
         np.subtract(S, Y[:, None], tmp)
-        tmp[ind, I] = S[ind, I] - Y2
+        tmp[ind, tmp_idx] = S[ind, tmp_idx] - Y2
 
         # Damping
         tmp *= 1 - damping
@@ -203,21 +203,21 @@ def affinity_propagation(S, preference=None, convergence_iter=15, max_iter=200,
         if verbose:
             print("Did not converge")
 
-    I = np.flatnonzero(E)
-    K = I.size  # Identify exemplars
+    Ie = np.flatnonzero(E)
+    K = tmp_idx.size  # Identify exemplars
 
     if K > 0 and not never_converged:
-        c = np.argmax(S[:, I], axis=1)
-        c[I] = np.arange(K)  # Identify clusters
+        c = np.argmax(S[:, Ie], axis=1)
+        c[tmp_idx] = np.arange(K)  # Identify clusters
         # Refine the final set of exemplars and clusters and return results
         for k in range(K):
             ii = np.where(c == k)[0]
             j = np.argmax(np.sum(S[ii[:, np.newaxis], ii], axis=0))
-            I[k] = ii[j]
+            Ie[k] = ii[j]
 
-        c = np.argmax(S[:, I], axis=1)
-        c[I] = np.arange(K)
-        labels = I[c]
+        c = np.argmax(S[:, Ie], axis=1)
+        c[Ie] = np.arange(K)
+        labels = Ie[c]
         # Reduce labels to a sorted, gapless, list
         cluster_centers_indices = np.unique(labels)
         labels = np.searchsorted(cluster_centers_indices, labels)
