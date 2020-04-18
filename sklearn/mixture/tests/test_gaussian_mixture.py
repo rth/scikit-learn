@@ -88,7 +88,7 @@ class RandomData:
             'diag': 1. / self.covariances['diag'],
             'tied': linalg.inv(self.covariances['tied']),
             'full': np.array([linalg.inv(covariance)
-                             for covariance in self.covariances['full']])}
+                              for covariance in self.covariances['full']])}
 
         self.X = dict(zip(COVARIANCE_TYPE, [generate_data(
             n_samples, n_features, self.weights, self.means, self.covariances,
@@ -636,13 +636,13 @@ def test_gaussian_mixture_fit():
             prec_test = np.array([rand_data.precisions['tied']] * n_components)
         elif covar_type == 'spherical':
             prec_pred = np.array([np.eye(n_features) * c
-                                 for c in g.precisions_])
+                                  for c in g.precisions_])
             prec_test = np.array([np.eye(n_features) * c for c in
-                                 rand_data.precisions['spherical']])
+                                  rand_data.precisions['spherical']])
         elif covar_type == 'diag':
             prec_pred = np.array([np.diag(d) for d in g.precisions_])
             prec_test = np.array([np.diag(d) for d in
-                                 rand_data.precisions['diag']])
+                                  rand_data.precisions['diag']])
 
         arg_idx1 = np.trace(prec_pred, axis1=1, axis2=2).argsort()
         arg_idx2 = np.trace(prec_test, axis1=1, axis2=2).argsort()
@@ -1010,7 +1010,7 @@ def test_sample():
                     decimal=1)
 
         means_s = np.array([np.mean(X_s[y_s == k], 0)
-                           for k in range(n_components)])
+                            for k in range(n_components)])
         assert_array_almost_equal(gmm.means_, means_s, decimal=1)
 
         # Check shapes of sampled data, see

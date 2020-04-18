@@ -1003,7 +1003,7 @@ def test_neighbors_iris():
         rgs = neighbors.KNeighborsRegressor(n_neighbors=5, algorithm=algorithm)
         rgs.fit(iris.data, iris.target)
         assert (np.mean(rgs.predict(iris.data).round() == iris.target) >
-                       0.95)
+                0.95)
 
 
 def test_neighbors_digits():

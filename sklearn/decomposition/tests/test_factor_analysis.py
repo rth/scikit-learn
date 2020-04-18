@@ -65,7 +65,7 @@ def test_factor_analysis():
         with pytest.raises(ValueError):
             fa.fit(X[:, :2])
 
-    f = lambda x, y: np.abs(getattr(x, y))  # sign will not be equal
+    def f(x, y): return np.abs(getattr(x, y))  # sign will not be equal
     fa1, fa2 = fas
     for attr in ['loglike_', 'components_', 'noise_variance_']:
         assert_almost_equal(f(fa1, attr), f(fa2, attr))

@@ -424,7 +424,7 @@ class RadiusNeighborsClassifier(NeighborsBase, RadiusNeighborsMixin,
 
         else:
             if (_is_arraylike(self.outlier_label) and
-               not isinstance(self.outlier_label, str)):
+                    not isinstance(self.outlier_label, str)):
                 if len(self.outlier_label) != len(classes_):
                     raise ValueError("The length of outlier_label: {} is "
                                      "inconsistent with the output "
@@ -436,7 +436,7 @@ class RadiusNeighborsClassifier(NeighborsBase, RadiusNeighborsMixin,
 
             for classes, label in zip(classes_, outlier_label_):
                 if (_is_arraylike(label) and
-                   not isinstance(label, str)):
+                        not isinstance(label, str)):
                     # ensure the outlier lable for each output is a scalar.
                     raise TypeError("The outlier_label of classes {} is "
                                     "supposed to be a scalar, got "

@@ -1204,7 +1204,7 @@ class LinearModelCV(MultiOutputMixin, LinearModel, metaclass=ABCMeta):
                                     dtype=[np.float64, np.float32], copy=False)
             if sparse.isspmatrix(X):
                 if (hasattr(reference_to_old_X, "data") and
-                   not np.may_share_memory(reference_to_old_X.data, X.data)):
+                        not np.may_share_memory(reference_to_old_X.data, X.data)):
                     # X is a sparse matrix and has been copied
                     copy_X = False
             elif not np.may_share_memory(reference_to_old_X, X):
@@ -1801,6 +1801,7 @@ class MultiTaskElasticNet(Lasso):
     To avoid unnecessary memory duplication the X argument of the fit method
     should be directly passed as a Fortran-contiguous numpy array.
     """
+
     def __init__(self, alpha=1.0, l1_ratio=0.5, fit_intercept=True,
                  normalize=False, copy_X=True, max_iter=1000, tol=1e-4,
                  warm_start=False, random_state=None, selection='cyclic'):
@@ -1983,6 +1984,7 @@ class MultiTaskLasso(MultiTaskElasticNet):
     To avoid unnecessary memory duplication the X argument of the fit method
     should be directly passed as a Fortran-contiguous numpy array.
     """
+
     def __init__(self, alpha=1.0, fit_intercept=True, normalize=False,
                  copy_X=True, max_iter=1000, tol=1e-4, warm_start=False,
                  random_state=None, selection='cyclic'):

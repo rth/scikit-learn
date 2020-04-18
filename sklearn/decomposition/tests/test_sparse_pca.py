@@ -13,6 +13,7 @@ from sklearn.utils._testing import if_safe_multiprocessing_with_blas
 from sklearn.decomposition import SparsePCA, MiniBatchSparsePCA, PCA
 from sklearn.utils import check_random_state
 
+
 def generate_toy_data(n_components, n_samples, image_size, random_state=None):
     n_features = image_size[0] * image_size[1]
 

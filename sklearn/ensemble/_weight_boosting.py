@@ -252,7 +252,7 @@ class BaseWeightBoosting(BaseEnsemble, metaclass=ABCMeta):
         try:
             norm = self.estimator_weights_.sum()
             return (sum(weight * clf.feature_importances_ for weight, clf
-                    in zip(self.estimator_weights_, self.estimators_))
+                        in zip(self.estimator_weights_, self.estimators_))
                     / norm)
 
         except AttributeError:

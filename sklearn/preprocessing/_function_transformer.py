@@ -78,6 +78,7 @@ class FunctionTransformer(TransformerMixin, BaseEstimator):
     array([[0.       , 0.6931...],
            [1.0986..., 1.3862...]])
     """
+
     def __init__(self, func=None, inverse_func=None, validate=False,
                  accept_sparse=False, check_inverse=True, kw_args=None,
                  inv_kw_args=None):

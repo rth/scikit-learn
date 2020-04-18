@@ -200,6 +200,7 @@ class TweedieDistribution(ExponentialDispersionModel):
             :math:`v(y_\textrm{pred}) = y_\textrm{pred}^{power}`.
             For ``0<power<1``, no distribution exists.
     """
+
     def __init__(self, power=0):
         self.power = power
 
@@ -325,24 +326,28 @@ class TweedieDistribution(ExponentialDispersionModel):
 
 class NormalDistribution(TweedieDistribution):
     """Class for the Normal (aka Gaussian) distribution"""
+
     def __init__(self):
         super().__init__(power=0)
 
 
 class PoissonDistribution(TweedieDistribution):
     """Class for the scaled Poisson distribution"""
+
     def __init__(self):
         super().__init__(power=1)
 
 
 class GammaDistribution(TweedieDistribution):
     """Class for the Gamma distribution"""
+
     def __init__(self):
         super().__init__(power=2)
 
 
 class InverseGaussianDistribution(TweedieDistribution):
     """Class for the scaled InverseGaussianDistribution distribution"""
+
     def __init__(self):
         super().__init__(power=3)
 

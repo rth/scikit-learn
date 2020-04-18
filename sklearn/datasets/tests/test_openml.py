@@ -407,7 +407,7 @@ def test_fetch_openml_anneal_pandas(monkeypatch):
     assert isinstance(data, pd.DataFrame)
     assert data.shape == data_shape
     n_categories = len([dtype for dtype in data.dtypes
-                       if isinstance(dtype, CategoricalDtype)])
+                        if isinstance(dtype, CategoricalDtype)])
     n_floats = len([dtype for dtype in data.dtypes if dtype.kind == 'f'])
     assert expected_data_categories == n_categories
     assert expected_data_floats == n_floats
@@ -504,7 +504,7 @@ def test_fetch_openml_adultcensus_pandas_return_X_y(monkeypatch):
     assert isinstance(X, pd.DataFrame)
     assert X.shape == data_shape
     n_categories = len([dtype for dtype in X.dtypes
-                       if isinstance(dtype, CategoricalDtype)])
+                        if isinstance(dtype, CategoricalDtype)])
     n_floats = len([dtype for dtype in X.dtypes if dtype.kind == 'f'])
     assert expected_data_categories == n_categories
     assert expected_data_floats == n_floats
@@ -537,7 +537,7 @@ def test_fetch_openml_adultcensus_pandas(monkeypatch):
     assert isinstance(data, pd.DataFrame)
     assert data.shape == data_shape
     n_categories = len([dtype for dtype in data.dtypes
-                       if isinstance(dtype, CategoricalDtype)])
+                        if isinstance(dtype, CategoricalDtype)])
     n_floats = len([dtype for dtype in data.dtypes if dtype.kind == 'f'])
     assert expected_data_categories == n_categories
     assert expected_data_floats == n_floats
@@ -584,7 +584,7 @@ def test_fetch_openml_miceprotein_pandas(monkeypatch):
     assert isinstance(frame, pd.DataFrame)
     assert frame.shape == frame_shape
     n_categories = len([dtype for dtype in frame.dtypes
-                       if isinstance(dtype, CategoricalDtype)])
+                        if isinstance(dtype, CategoricalDtype)])
     n_floats = len([dtype for dtype in frame.dtypes if dtype.kind == 'f'])
     assert frame_n_categories == n_categories
     assert frame_n_floats == n_floats
@@ -622,7 +622,7 @@ def test_fetch_openml_emotions_pandas(monkeypatch):
     assert isinstance(frame, pd.DataFrame)
     assert frame.shape == frame_shape
     n_categories = len([dtype for dtype in frame.dtypes
-                       if isinstance(dtype, CategoricalDtype)])
+                        if isinstance(dtype, CategoricalDtype)])
     n_floats = len([dtype for dtype in frame.dtypes if dtype.kind == 'f'])
     assert expected_frame_categories == n_categories
     assert expected_frame_floats == n_floats

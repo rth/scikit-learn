@@ -23,7 +23,7 @@ cdef class KDTree(BinaryTree):
     pass
 
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # The functions below specialized the Binary Tree as a KD Tree
 #
 #   Note that these functions use the concept of "reduced distance".
@@ -49,12 +49,12 @@ cdef int init_node(BinaryTree tree, ITYPE_t i_node,
     cdef ITYPE_t i, j
     cdef DTYPE_t rad = 0
 
-    cdef DTYPE_t* lower_bounds = &tree.node_bounds[0, i_node, 0]
-    cdef DTYPE_t* upper_bounds = &tree.node_bounds[1, i_node, 0]
-    cdef DTYPE_t* data = &tree.data[0, 0]
-    cdef ITYPE_t* idx_array = &tree.idx_array[0]
+    cdef DTYPE_t * lower_bounds = &tree.node_bounds[0, i_node, 0]
+    cdef DTYPE_t * upper_bounds = &tree.node_bounds[1, i_node, 0]
+    cdef DTYPE_t * data = &tree.data[0, 0]
+    cdef ITYPE_t * idx_array = &tree.idx_array[0]
 
-    cdef DTYPE_t* data_row
+    cdef DTYPE_t * data_row
 
     # determine Node bounds
     for j in range(n_features):
@@ -88,10 +88,10 @@ cdef int init_node(BinaryTree tree, ITYPE_t i_node,
 
 
 cdef DTYPE_t min_rdist(BinaryTree tree, ITYPE_t i_node,
-                       DTYPE_t* pt) nogil except -1:
+                       DTYPE_t * pt) nogil except -1:
     """Compute the minimum reduced-distance between a point and a node"""
     cdef ITYPE_t n_features = tree.data.shape[1]
-    cdef DTYPE_t d, d_lo, d_hi, rdist=0.0
+    cdef DTYPE_t d, d_lo, d_hi, rdist = 0.0
     cdef ITYPE_t j
 
     if tree.dist_metric.p == INF:
@@ -111,7 +111,7 @@ cdef DTYPE_t min_rdist(BinaryTree tree, ITYPE_t i_node,
     return rdist
 
 
-cdef DTYPE_t min_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt) except -1:
+cdef DTYPE_t min_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t * pt) except -1:
     """Compute the minimum distance between a point and a node"""
     if tree.dist_metric.p == INF:
         return min_rdist(tree, i_node, pt)
@@ -120,11 +120,11 @@ cdef DTYPE_t min_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt) except -1:
 
 
 cdef DTYPE_t max_rdist(BinaryTree tree,
-                       ITYPE_t i_node, DTYPE_t* pt) except -1:
+                       ITYPE_t i_node, DTYPE_t * pt) except -1:
     """Compute the maximum reduced-distance between a point and a node"""
     cdef ITYPE_t n_features = tree.data.shape[1]
 
-    cdef DTYPE_t d, d_lo, d_hi, rdist=0.0
+    cdef DTYPE_t d, d_lo, d_hi, rdist = 0.0
     cdef ITYPE_t j
 
     if tree.dist_metric.p == INF:
@@ -140,7 +140,7 @@ cdef DTYPE_t max_rdist(BinaryTree tree,
     return rdist
 
 
-cdef DTYPE_t max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt) except -1:
+cdef DTYPE_t max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t * pt) except -1:
     """Compute the maximum distance between a point and a node"""
     if tree.dist_metric.p == INF:
         return max_rdist(tree, i_node, pt)
@@ -148,8 +148,8 @@ cdef DTYPE_t max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt) except -1:
         return pow(max_rdist(tree, i_node, pt), 1. / tree.dist_metric.p)
 
 
-cdef inline int min_max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt,
-                             DTYPE_t* min_dist, DTYPE_t* max_dist) nogil except -1:
+cdef inline int min_max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t * pt,
+                             DTYPE_t * min_dist, DTYPE_t * max_dist) nogil except -1:
     """Compute the minimum and maximum distance between a point and a node"""
     cdef ITYPE_t n_features = tree.data.shape[1]
 
@@ -190,7 +190,7 @@ cdef inline DTYPE_t min_rdist_dual(BinaryTree tree1, ITYPE_t i_node1,
     """Compute the minimum reduced distance between two nodes"""
     cdef ITYPE_t n_features = tree1.data.shape[1]
 
-    cdef DTYPE_t d, d1, d2, rdist=0.0
+    cdef DTYPE_t d, d1, d2, rdist = 0.0
     cdef DTYPE_t zero = 0.0
     cdef ITYPE_t j
 
@@ -229,7 +229,7 @@ cdef inline DTYPE_t max_rdist_dual(BinaryTree tree1, ITYPE_t i_node1,
     """Compute the maximum reduced distance between two nodes"""
     cdef ITYPE_t n_features = tree1.data.shape[1]
 
-    cdef DTYPE_t d, d1, d2, rdist=0.0
+    cdef DTYPE_t d, d1, d2, rdist = 0.0
     cdef DTYPE_t zero = 0.0
     cdef ITYPE_t j
 

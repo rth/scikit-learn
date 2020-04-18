@@ -592,6 +592,7 @@ class TempMemmap:
     data
     mmap_mode
     """
+
     def __init__(self, data, mmap_mode='r'):
         self.mmap_mode = mmap_mode
         self.data = data

@@ -272,6 +272,7 @@ def test_transform_target_regressor_ensure_y_array():
 
 class DummyTransformer(TransformerMixin, BaseEstimator):
     """Dummy transformer which count how many time fit was called."""
+
     def __init__(self, fit_counter=0):
         self.fit_counter = fit_counter
 

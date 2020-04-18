@@ -70,6 +70,7 @@ def test_affinity_propagation():
     with pytest.raises(TypeError):
         af_2.fit(csr_matrix((3, 3)))
 
+
 def test_affinity_propagation_predict():
     # Test AffinityPropagation.predict
     af = AffinityPropagation(affinity="euclidean")

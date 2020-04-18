@@ -113,6 +113,7 @@ class KernelRidge(MultiOutputMixin, RegressorMixin, BaseEstimator):
     >>> clf.fit(X, y)
     KernelRidge(alpha=1.0)
     """
+
     def __init__(self, alpha=1, kernel="linear", gamma=None, degree=3, coef0=1,
                  kernel_params=None):
         self.alpha = alpha

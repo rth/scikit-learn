@@ -10,8 +10,8 @@ from sklearn.svm.tests import test_svm
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.utils.extmath import safe_sparse_dot
 from sklearn.utils._testing import (assert_warns,
-                                   assert_raise_message, ignore_warnings,
-                                   skip_if_32bit)
+                                    assert_raise_message, ignore_warnings,
+                                    skip_if_32bit)
 
 
 # test sample 1
@@ -149,7 +149,7 @@ def test_svc_iris():
     for k in ('linear', 'poly', 'rbf'):
         sp_clf = svm.SVC(kernel=k).fit(iris.data, iris.target)
         clf = svm.SVC(kernel=k).fit(iris.data.toarray(),
-                                                   iris.target)
+                                    iris.target)
 
         assert_array_almost_equal(clf.support_vectors_,
                                   sp_clf.support_vectors_.toarray())

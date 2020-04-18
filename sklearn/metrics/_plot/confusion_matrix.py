@@ -39,6 +39,7 @@ class ConfusionMatrixDisplay:
     figure_ : matplotlib Figure
         Figure containing the confusion matrix.
     """
+
     def __init__(self, confusion_matrix, display_labels):
         self.confusion_matrix = confusion_matrix
         self.display_labels = display_labels

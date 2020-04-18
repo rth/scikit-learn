@@ -30,7 +30,7 @@ cdef class BallTree(BinaryTree):
     pass
 
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # The functions below specialized the Binary Tree as a Ball Tree
 #
 #   Note that these functions use the concept of "reduced distance".
@@ -56,14 +56,14 @@ cdef int init_node(BinaryTree tree, ITYPE_t i_node,
 
     cdef ITYPE_t i, j
     cdef DTYPE_t radius
-    cdef DTYPE_t *this_pt
+    cdef DTYPE_t * this_pt
 
-    cdef ITYPE_t* idx_array = &tree.idx_array[0]
-    cdef DTYPE_t* data = &tree.data[0, 0]
-    cdef DTYPE_t* centroid = &tree.node_bounds[0, i_node, 0]
+    cdef ITYPE_t * idx_array = &tree.idx_array[0]
+    cdef DTYPE_t * data = &tree.data[0, 0]
+    cdef DTYPE_t * centroid = &tree.node_bounds[0, i_node, 0]
 
     cdef bint with_sample_weight = tree.sample_weight is not None
-    cdef DTYPE_t* sample_weight
+    cdef DTYPE_t * sample_weight
     cdef DTYPE_t sum_weight_node
     if with_sample_weight:
         sample_weight = &tree.sample_weight[0]
@@ -106,25 +106,25 @@ cdef int init_node(BinaryTree tree, ITYPE_t i_node,
 
 
 cdef inline DTYPE_t min_dist(BinaryTree tree, ITYPE_t i_node,
-                             DTYPE_t* pt) nogil except -1:
+                             DTYPE_t * pt) nogil except -1:
     """Compute the minimum distance between a point and a node"""
-    cdef DTYPE_t dist_pt = tree.dist(pt, &tree.node_bounds[0, i_node, 0],
+    cdef DTYPE_t dist_pt = tree.dist(pt, & tree.node_bounds[0, i_node, 0],
                                      tree.data.shape[1])
     return fmax(0, dist_pt - tree.node_data[i_node].radius)
 
 
 cdef inline DTYPE_t max_dist(BinaryTree tree, ITYPE_t i_node,
-                             DTYPE_t* pt) except -1:
+                             DTYPE_t * pt) except -1:
     """Compute the maximum distance between a point and a node"""
-    cdef DTYPE_t dist_pt = tree.dist(pt, &tree.node_bounds[0, i_node, 0],
+    cdef DTYPE_t dist_pt = tree.dist(pt, & tree.node_bounds[0, i_node, 0],
                                      tree.data.shape[1])
     return dist_pt + tree.node_data[i_node].radius
 
 
-cdef inline int min_max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt,
-                             DTYPE_t* min_dist, DTYPE_t* max_dist) nogil except -1:
+cdef inline int min_max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t * pt,
+                             DTYPE_t * min_dist, DTYPE_t * max_dist) nogil except -1:
     """Compute the minimum and maximum distance between a point and a node"""
-    cdef DTYPE_t dist_pt = tree.dist(pt, &tree.node_bounds[0, i_node, 0],
+    cdef DTYPE_t dist_pt = tree.dist(pt, & tree.node_bounds[0, i_node, 0],
                                      tree.data.shape[1])
     cdef DTYPE_t rad = tree.node_data[i_node].radius
     min_dist[0] = fmax(0, dist_pt - rad)
@@ -133,7 +133,7 @@ cdef inline int min_max_dist(BinaryTree tree, ITYPE_t i_node, DTYPE_t* pt,
 
 
 cdef inline DTYPE_t min_rdist(BinaryTree tree, ITYPE_t i_node,
-                              DTYPE_t* pt) nogil except -1:
+                              DTYPE_t * pt) nogil except -1:
     """Compute the minimum reduced-distance between a point and a node"""
     if tree.euclidean:
         return euclidean_dist_to_rdist(min_dist(tree, i_node, pt))
@@ -142,7 +142,7 @@ cdef inline DTYPE_t min_rdist(BinaryTree tree, ITYPE_t i_node,
 
 
 cdef inline DTYPE_t max_rdist(BinaryTree tree, ITYPE_t i_node,
-                              DTYPE_t* pt) except -1:
+                              DTYPE_t * pt) except -1:
     """Compute the maximum reduced-distance between a point and a node"""
     if tree.euclidean:
         return euclidean_dist_to_rdist(max_dist(tree, i_node, pt))
@@ -153,9 +153,9 @@ cdef inline DTYPE_t max_rdist(BinaryTree tree, ITYPE_t i_node,
 cdef inline DTYPE_t min_dist_dual(BinaryTree tree1, ITYPE_t i_node1,
                                   BinaryTree tree2, ITYPE_t i_node2) except -1:
     """compute the minimum distance between two nodes"""
-    cdef DTYPE_t dist_pt = tree1.dist(&tree2.node_bounds[0, i_node2, 0],
-                                      &tree1.node_bounds[0, i_node1, 0],
-                                      tree1.data.shape[1])
+    cdef DTYPE_t dist_pt = tree1.dist(& tree2.node_bounds[0, i_node2, 0],
+                                       & tree1.node_bounds[0, i_node1, 0],
+                                       tree1.data.shape[1])
     return fmax(0, (dist_pt - tree1.node_data[i_node1].radius
                     - tree2.node_data[i_node2].radius))
 
@@ -163,9 +163,9 @@ cdef inline DTYPE_t min_dist_dual(BinaryTree tree1, ITYPE_t i_node1,
 cdef inline DTYPE_t max_dist_dual(BinaryTree tree1, ITYPE_t i_node1,
                                   BinaryTree tree2, ITYPE_t i_node2) except -1:
     """compute the maximum distance between two nodes"""
-    cdef DTYPE_t dist_pt = tree1.dist(&tree2.node_bounds[0, i_node2, 0],
-                                      &tree1.node_bounds[0, i_node1, 0],
-                                      tree1.data.shape[1])
+    cdef DTYPE_t dist_pt = tree1.dist(& tree2.node_bounds[0, i_node2, 0],
+                                       & tree1.node_bounds[0, i_node1, 0],
+                                       tree1.data.shape[1])
     return (dist_pt + tree1.node_data[i_node1].radius
             + tree2.node_data[i_node2].radius)
 

@@ -1311,9 +1311,9 @@ def test_callable_analyzer_reraise_error(tmpdir, Estimator):
     'stop_words, tokenizer, preprocessor, ngram_range, token_pattern,'
     'analyzer, unused_name, ovrd_name, ovrd_msg',
     [(["you've", "you'll"], None, None, (1, 1), None, 'char',
-     "'stop_words'", "'analyzer'", "!= 'word'"),
+      "'stop_words'", "'analyzer'", "!= 'word'"),
      (None, lambda s: s.split(), None, (1, 1), None, 'char',
-     "'tokenizer'", "'analyzer'", "!= 'word'"),
+      "'tokenizer'", "'analyzer'", "!= 'word'"),
      (None, lambda s: s.split(), None, (1, 1), r'\w+', 'word',
       "'token_pattern'", "'tokenizer'", "is not None"),
      (None, None, lambda s:s.upper(), (1, 1), r'\w+', lambda s:s.upper(),

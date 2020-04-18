@@ -25,7 +25,6 @@ from sklearn.utils import parallel_backend
 from sklearn.utils._testing import _convert_container
 
 
-
 @pytest.mark.parametrize("n_jobs", [1, 2])
 def test_permutation_importance_correlated_feature_regression(n_jobs):
     # Make sure that feature highly correlated to the target have a higher

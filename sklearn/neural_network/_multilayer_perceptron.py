@@ -936,6 +936,7 @@ class MLPClassifier(ClassifierMixin, BaseMultilayerPerceptron):
     Kingma, Diederik, and Jimmy Ba. "Adam: A method for stochastic
         optimization." arXiv preprint arXiv:1412.6980 (2014).
     """
+
     def __init__(self, hidden_layer_sizes=(100,), activation="relu",
                  solver='adam', alpha=0.0001,
                  batch_size='auto', learning_rate="constant",
@@ -1339,6 +1340,7 @@ class MLPRegressor(RegressorMixin, BaseMultilayerPerceptron):
     Kingma, Diederik, and Jimmy Ba. "Adam: A method for stochastic
         optimization." arXiv preprint arXiv:1412.6980 (2014).
     """
+
     def __init__(self, hidden_layer_sizes=(100,), activation="relu",
                  solver='adam', alpha=0.0001,
                  batch_size='auto', learning_rate="constant",

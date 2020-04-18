@@ -88,10 +88,10 @@ def test_graph_lasso_2D():
     # Hard-coded solution from Python skggm package
     # obtained by calling `quic(emp_cov, lam=.1, tol=1e-8)`
     cov_skggm = np.array([[3.09550269, 1.186972],
-                         [1.186972, 0.57713289]])
+                          [1.186972, 0.57713289]])
 
     icov_skggm = np.array([[1.52836773, -3.14334831],
-                          [-3.14334831,  8.19753385]])
+                           [-3.14334831,  8.19753385]])
     X = datasets.load_iris().data[:, 2:]
     emp_cov = empirical_covariance(X)
     for method in ('cd', 'lars'):

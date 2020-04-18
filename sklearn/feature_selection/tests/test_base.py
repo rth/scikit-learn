@@ -11,6 +11,7 @@ from sklearn.utils import check_array
 
 class StepSelector(SelectorMixin, BaseEstimator):
     """Retain every `step` features (beginning with 0)"""
+
     def __init__(self, step=2):
         self.step = step
 
@@ -82,9 +83,9 @@ def test_inverse_transform_dense():
 
     # Check dtype matches
     assert (np.int32 ==
-                 sel.inverse_transform(Xt.astype(np.int32)).dtype)
+            sel.inverse_transform(Xt.astype(np.int32)).dtype)
     assert (np.float32 ==
-                 sel.inverse_transform(Xt.astype(np.float32)).dtype)
+            sel.inverse_transform(Xt.astype(np.float32)).dtype)
 
     # Check 1d list and other dtype:
     names_inv_actual = sel.inverse_transform([feature_names_t])
@@ -103,9 +104,9 @@ def test_inverse_transform_sparse():
 
     # Check dtype matches
     assert (np.int32 ==
-                 sel.inverse_transform(sparse(Xt).astype(np.int32)).dtype)
+            sel.inverse_transform(sparse(Xt).astype(np.int32)).dtype)
     assert (np.float32 ==
-                 sel.inverse_transform(sparse(Xt).astype(np.float32)).dtype)
+            sel.inverse_transform(sparse(Xt).astype(np.float32)).dtype)
 
     # Check wrong shape raises error
     with pytest.raises(ValueError):

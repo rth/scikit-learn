@@ -406,6 +406,7 @@ class PartialDependenceDisplay:
         Figure containing partial dependence plots.
 
     """
+
     def __init__(self, pd_results, features, feature_names, target_idx,
                  pdp_lim, deciles):
         self.pd_results = pd_results

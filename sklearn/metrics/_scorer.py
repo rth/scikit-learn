@@ -72,6 +72,7 @@ class _MultimetricScorer:
     scorers : dict
         Dictionary mapping names to callable scorers.
     """
+
     def __init__(self, **scorers):
         self._scorers = scorers
 

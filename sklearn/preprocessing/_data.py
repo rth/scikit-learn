@@ -1433,6 +1433,7 @@ class PolynomialFeatures(TransformerMixin, BaseEstimator):
     See :ref:`examples/linear_model/plot_polynomial_interpolation.py
     <sphx_glr_auto_examples_linear_model_plot_polynomial_interpolation.py>`
     """
+
     def __init__(self, degree=2, interaction_only=False, include_bias=True,
                  order='C'):
         self.degree = degree
@@ -2764,6 +2765,7 @@ class PowerTransformer(TransformerMixin, BaseEstimator):
     .. [2] G.E.P. Box and D.R. Cox, "An Analysis of Transformations", Journal
            of the Royal Statistical Society B, 26, 211-252 (1964).
     """
+
     def __init__(self, method='yeo-johnson', standardize=True, copy=True):
         self.method = method
         self.standardize = standardize

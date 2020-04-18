@@ -9,10 +9,10 @@ from sklearn.utils.graph import (graph_shortest_path,
 def floyd_warshall_slow(graph, directed=False):
     N = graph.shape[0]
 
-    #set nonzero entries to infinity
+    # set nonzero entries to infinity
     graph[np.where(graph == 0)] = np.inf
 
-    #set diagonal to zero
+    # set diagonal to zero
     graph.flat[::N + 1] = 0
 
     if not directed:
@@ -29,18 +29,18 @@ def floyd_warshall_slow(graph, directed=False):
 
 
 def generate_graph(N=20):
-    #sparse grid of distances
+    # sparse grid of distances
     rng = np.random.RandomState(0)
     dist_matrix = rng.random_sample((N, N))
 
-    #make symmetric: distances are not direction-dependent
+    # make symmetric: distances are not direction-dependent
     dist_matrix = dist_matrix + dist_matrix.T
 
-    #make graph sparse
+    # make graph sparse
     i = (rng.randint(N, size=N * N // 2), rng.randint(N, size=N * N // 2))
     dist_matrix[i] = 0
 
-    #set diagonal to zero
+    # set diagonal to zero
     dist_matrix.flat[::N + 1] = 0
 
     return dist_matrix

@@ -1063,6 +1063,7 @@ class _IdentityClassifier(LinearClassifierMixin):
     We inherit from LinearClassifierMixin to get the proper shape for the
     output `y`.
     """
+
     def __init__(self, classes):
         self.classes_ = classes
 

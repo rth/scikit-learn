@@ -422,6 +422,7 @@ class Klass:
 class MockEst:
     def __init__(self):
         """MockEstimator"""
+
     def fit(self, X, y):
         return X
 

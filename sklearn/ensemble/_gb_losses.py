@@ -152,6 +152,7 @@ class RegressionLossFunction(LossFunction, metaclass=ABCMeta):
     n_classes : int
         Number of classes.
     """
+
     def __init__(self, n_classes):
         if n_classes != 1:
             raise ValueError("``n_classes`` must be 1 for regression but "
@@ -270,6 +271,7 @@ class LeastAbsoluteError(RegressionLossFunction):
     n_classes : int
         Number of classes
     """
+
     def init_estimator(self):
         return DummyRegressor(strategy='quantile', quantile=.5)
 
@@ -445,6 +447,7 @@ class QuantileLossFunction(RegressionLossFunction):
     alpha : float, default=0.9
         The percentile.
     """
+
     def __init__(self, n_classes, alpha=0.9):
         super().__init__(n_classes)
         self.alpha = alpha
@@ -478,8 +481,8 @@ class QuantileLossFunction(RegressionLossFunction):
                     (1 - alpha) * diff[~mask].sum()) / y.shape[0]
         else:
             loss = ((alpha * np.sum(sample_weight[mask] * diff[mask]) -
-                    (1 - alpha) * np.sum(sample_weight[~mask] *
-                                         diff[~mask])) / sample_weight.sum())
+                     (1 - alpha) * np.sum(sample_weight[~mask] *
+                                          diff[~mask])) / sample_weight.sum())
         return loss
 
     def negative_gradient(self, y, raw_predictions, **kargs):
@@ -571,6 +574,7 @@ class BinomialDeviance(ClassificationLossFunction):
     n_classes : int
         Number of classes.
     """
+
     def __init__(self, n_classes):
         if n_classes != 2:
             raise ValueError("{0:s} requires 2 classes; got {1:d} class(es)"
@@ -787,6 +791,7 @@ class ExponentialLoss(ClassificationLossFunction):
     ----------
     Greg Ridgeway, Generalized Boosted Models: A guide to the gbm package, 2007
     """
+
     def __init__(self, n_classes):
         if n_classes != 2:
             raise ValueError("{0:s} requires 2 classes; got {1:d} class(es)"

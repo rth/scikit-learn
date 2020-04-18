@@ -125,7 +125,7 @@ def test_precomputed():
     # same as before, but using a callable function instead of the kernel
     # matrix. kernel is just a linear kernel
 
-    kfunc = lambda x, y: np.dot(x, y.T)
+    def kfunc(x, y): return np.dot(x, y.T)
     clf = svm.SVC(kernel=kfunc)
     clf.fit(np.array(X), Y)
     pred = clf.predict(T)
@@ -528,7 +528,7 @@ def test_negative_sample_weights_mask_all_samples(Estimator,
 @pytest.mark.parametrize(
     "Classifier, err_msg",
     [(svm.SVC,
-     'Invalid input - all samples with positive weights have the same label'),
+      'Invalid input - all samples with positive weights have the same label'),
      (svm.NuSVC, 'specified nu is infeasible')],
     ids=['SVC', 'NuSVC']
 )
@@ -550,7 +550,7 @@ def test_negative_weights_svc_leave_just_one_label(Classifier,
     "Classifier, model",
     [(svm.SVC, {'when-left': [0.3998, 0.4], 'when-right': [0.4, 0.3999]}),
      (svm.NuSVC, {'when-left': [0.3333, 0.3333],
-      'when-right': [0.3333, 0.3333]})],
+                  'when-right': [0.3333, 0.3333]})],
     ids=['SVC', 'NuSVC']
 )
 @pytest.mark.parametrize(

@@ -471,7 +471,7 @@ def test_selectkbest_tiebreaking():
     # Prior to 0.11, SelectKBest would return more features than requested.
     Xs = [[0, 1, 1], [0, 0, 1], [1, 0, 0], [1, 1, 0]]
     y = [1]
-    dummy_score = lambda X, y: (X[0], X[0])
+    def dummy_score(X, y): return (X[0], X[0])
     for X in Xs:
         sel = SelectKBest(dummy_score, k=1)
         X1 = ignore_warnings(sel.fit_transform)([X], y)
@@ -488,7 +488,7 @@ def test_selectpercentile_tiebreaking():
     # Test if SelectPercentile selects the right n_features in case of ties.
     Xs = [[0, 1, 1], [0, 0, 1], [1, 0, 0], [1, 1, 0]]
     y = [1]
-    dummy_score = lambda X, y: (X[0], X[0])
+    def dummy_score(X, y): return (X[0], X[0])
     for X in Xs:
         sel = SelectPercentile(dummy_score, percentile=34)
         X1 = ignore_warnings(sel.fit_transform)([X], y)

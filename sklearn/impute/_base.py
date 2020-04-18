@@ -205,6 +205,7 @@ class SimpleImputer(_BaseImputer):
     upon :meth:`transform` if strategy is not "constant".
 
     """
+
     def __init__(self, missing_values=np.nan, strategy="mean",
                  fill_value=None, verbose=0, copy=True, add_indicator=False):
         super().__init__(
@@ -638,7 +639,7 @@ class MissingIndicator(TransformerMixin, BaseEstimator):
                              "'all'. Got {} instead.".format(self.features))
 
         if not ((isinstance(self.sparse, str) and
-                self.sparse == "auto") or isinstance(self.sparse, bool)):
+                 self.sparse == "auto") or isinstance(self.sparse, bool)):
             raise ValueError("'sparse' has to be a boolean or 'auto'. "
                              "Got {!r} instead.".format(self.sparse))
 

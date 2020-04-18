@@ -76,6 +76,7 @@ class ModifyInitParams(BaseEstimator):
     Equal parameters but with a type cast.
     Doesn't fulfill a is a
     """
+
     def __init__(self, a=np.array([0])):
         self.a = a.copy()
 
@@ -100,6 +101,7 @@ class NoEstimator:
 
 class VargEstimator(BaseEstimator):
     """scikit-learn estimators shouldn't have vargs."""
+
     def __init__(self, *vargs):
         pass
 
@@ -321,6 +323,7 @@ def test_clone_pandas_dataframe():
         Notes
         -----
         """
+
         def __init__(self, df=None, scalar_param=1):
             self.df = df
             self.scalar_param = scalar_param

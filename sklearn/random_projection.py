@@ -489,6 +489,7 @@ class GaussianRandomProjection(BaseRandomProjection):
     SparseRandomProjection
 
     """
+
     def __init__(self, n_components='auto', eps=0.1, random_state=None):
         super().__init__(
             n_components=n_components,
@@ -626,6 +627,7 @@ class SparseRandomProjection(BaseRandomProjection):
            https://users.soe.ucsc.edu/~optas/papers/jl.pdf
 
     """
+
     def __init__(self, n_components='auto', density='auto', eps=0.1,
                  dense_output=False, random_state=None):
         super().__init__(

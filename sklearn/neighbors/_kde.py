@@ -89,6 +89,7 @@ class KernelDensity(BaseEstimator):
     >>> log_density
     array([-1.52955942, -1.51462041, -1.60244657])
     """
+
     def __init__(self, bandwidth=1.0, algorithm='auto',
                  kernel='gaussian', metric="euclidean", atol=0, rtol=0,
                  breadth_first=True, leaf_size=40, metric_params=None):

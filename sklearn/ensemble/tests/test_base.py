@@ -103,7 +103,7 @@ def test_set_random_states():
     assert isinstance(est1.steps[0][1].estimator.random_state, int)
     assert isinstance(est1.steps[1][1].random_state, int)
     assert (est1.get_params()['sel__estimator__random_state'] !=
-                     est1.get_params()['clf__random_state'])
+            est1.get_params()['clf__random_state'])
 
     # ensure multiple random_state parameters are invariant to get_params()
     # iteration order
@@ -122,6 +122,6 @@ def test_set_random_states():
         est2 = cls(make_steps())
         _set_random_states(est2, 3)
         assert (est1.get_params()['sel__estimator__random_state'] ==
-                     est2.get_params()['sel__estimator__random_state'])
+                est2.get_params()['sel__estimator__random_state'])
         assert (est1.get_params()['clf__random_state'] ==
-                     est2.get_params()['clf__random_state'])
+                est2.get_params()['clf__random_state'])

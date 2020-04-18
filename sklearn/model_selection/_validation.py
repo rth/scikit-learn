@@ -492,7 +492,7 @@ def _fit_and_score(estimator, X, y, scorer, train, test, verbose,
             msg = ''
         else:
             msg = '%s' % (', '.join('%s=%s' % (k, v)
-                          for k, v in parameters.items()))
+                                    for k, v in parameters.items()))
         print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
 
     # Adjust length of sample weights

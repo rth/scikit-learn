@@ -140,9 +140,11 @@ class NearestCentroid(ClassifierMixin, BaseEstimator):
             if self.metric == "manhattan":
                 # NumPy does not calculate median of sparse matrices.
                 if not is_X_sparse:
-                    self.centroids_[cur_class] = np.median(X[center_mask], axis=0)
+                    self.centroids_[cur_class] = np.median(
+                        X[center_mask], axis=0)
                 else:
-                    self.centroids_[cur_class] = csc_median_axis_0(X[center_mask])
+                    self.centroids_[cur_class] = csc_median_axis_0(
+                        X[center_mask])
             else:
                 if self.metric != 'euclidean':
                     warnings.warn("Averaging for metrics other than "

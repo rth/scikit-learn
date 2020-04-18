@@ -307,9 +307,9 @@ def test_number_of_subsets_of_features():
         rfe.fit(X, y)
         # this number also equals to the maximum of ranking_
         assert (np.max(rfe.ranking_) ==
-                     formula1(n_features, n_features_to_select, step))
+                formula1(n_features, n_features_to_select, step))
         assert (np.max(rfe.ranking_) ==
-                     formula2(n_features, n_features_to_select, step))
+                formula2(n_features, n_features_to_select, step))
 
     # In RFECV, 'fit' calls 'RFE._fit'
     # 'number_of_subsets_of_features' of RFE
@@ -331,9 +331,9 @@ def test_number_of_subsets_of_features():
         rfecv.fit(X, y)
 
         assert (rfecv.grid_scores_.shape[0] ==
-                     formula1(n_features, n_features_to_select, step))
+                formula1(n_features, n_features_to_select, step))
         assert (rfecv.grid_scores_.shape[0] ==
-                     formula2(n_features, n_features_to_select, step))
+                formula2(n_features, n_features_to_select, step))
 
 
 def test_rfe_cv_n_jobs():

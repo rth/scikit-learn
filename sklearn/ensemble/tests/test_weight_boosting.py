@@ -133,7 +133,7 @@ def test_iris():
         assert len(clf.estimators_) > 1
         # Check for distinct random states (see issue #7408)
         assert (len(set(est.random_state for est in clf.estimators_)) ==
-                     len(clf.estimators_))
+                len(clf.estimators_))
 
     # Somewhat hacky regression test: prior to
     # ae7adc880d624615a34bafdb1d75ef67051b8200,
@@ -155,7 +155,7 @@ def test_boston(loss):
     assert len(reg.estimators_) > 1
     # Check for distinct random states (see issue #7408)
     assert (len(set(est.random_state for est in reg.estimators_)) ==
-                 len(reg.estimators_))
+            len(reg.estimators_))
 
 
 @pytest.mark.parametrize("algorithm", ["SAMME", "SAMME.R"])
@@ -405,7 +405,7 @@ def test_sparse_classification():
         types = [i.data_type_ for i in sparse_classifier.estimators_]
 
         assert all([(t == csc_matrix or t == csr_matrix)
-                   for t in types])
+                    for t in types])
 
 
 def test_sparse_regression():
@@ -456,7 +456,7 @@ def test_sparse_regression():
         types = [i.data_type_ for i in sparse_classifier.estimators_]
 
         assert all([(t == csc_matrix or t == csr_matrix)
-                   for t in types])
+                    for t in types])
 
 
 def test_sample_weight_adaboost_regressor():
@@ -550,6 +550,7 @@ def test_adaboostregressor_sample_weight():
     assert score_with_outlier < score_no_outlier
     assert score_with_outlier < score_with_weight
     assert score_no_outlier == pytest.approx(score_with_weight)
+
 
 @pytest.mark.parametrize("algorithm", ["SAMME", "SAMME.R"])
 def test_adaboost_consistent_predict(algorithm):

@@ -138,7 +138,7 @@ def test_binary_search_neighbors():
 
     indptr = distance_graph.indptr
     P1_nn = np.array([P1[k, distance_graph.indices[indptr[k]:indptr[k + 1]]]
-                     for k in range(n_samples)])
+                      for k in range(n_samples)])
     assert_array_almost_equal(P1_nn, P2, decimal=4)
 
     # Test that the highest P_ij are the same when fewer neighbors are used

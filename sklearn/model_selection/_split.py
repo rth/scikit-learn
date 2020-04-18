@@ -497,6 +497,7 @@ class GroupKFold(_BaseKFold):
         For splitting the data according to explicit domain-specific
         stratification of the dataset.
     """
+
     def __init__(self, n_splits=5):
         super().__init__(n_splits, shuffle=False, random_state=None)
 
@@ -787,6 +788,7 @@ class TimeSeriesSplit(_BaseKFold):
     with a test set of size ``n_samples//(n_splits + 1)``,
     where ``n_samples`` is the number of samples.
     """
+
     def __init__(self, n_splits=5, max_train_size=None):
         super().__init__(n_splits, shuffle=False, random_state=None)
         self.max_train_size = max_train_size
@@ -1099,6 +1101,7 @@ class _RepeatedSplits(metaclass=ABCMeta):
         Constructor parameters for cv. Must not contain random_state
         and shuffle.
     """
+
     def __init__(self, cv, n_repeats=10, random_state=None, **cvargs):
         if not isinstance(n_repeats, numbers.Integral):
             raise ValueError("Number of repetitions must be of Integral type.")
@@ -1226,6 +1229,7 @@ class RepeatedKFold(_RepeatedSplits):
     --------
     RepeatedStratifiedKFold: Repeats Stratified K-Fold n times.
     """
+
     def __init__(self, n_splits=5, n_repeats=10, random_state=None):
         super().__init__(
             KFold, n_repeats, random_state, n_splits=n_splits)
@@ -1280,6 +1284,7 @@ class RepeatedStratifiedKFold(_RepeatedSplits):
     --------
     RepeatedKFold: Repeats K-Fold n times.
     """
+
     def __init__(self, n_splits=5, n_repeats=10, random_state=None):
         super().__init__(
             StratifiedKFold, n_repeats, random_state, n_splits=n_splits)
@@ -1421,6 +1426,7 @@ class ShuffleSplit(BaseShuffleSplit):
     TRAIN: [3 4 1] TEST: [5 2]
     TRAIN: [3 5 1] TEST: [2 4]
     """
+
     def __init__(self, n_splits=10, test_size=None, train_size=None,
                  random_state=None):
         super().__init__(
@@ -1748,13 +1754,13 @@ def _validate_shuffle_split(n_samples, test_size, train_size,
     train_size_type = np.asarray(train_size).dtype.kind
 
     if (test_size_type == 'i' and (test_size >= n_samples or test_size <= 0)
-       or test_size_type == 'f' and (test_size <= 0 or test_size >= 1)):
+            or test_size_type == 'f' and (test_size <= 0 or test_size >= 1)):
         raise ValueError('test_size={0} should be either positive and smaller'
                          ' than the number of samples {1} or a float in the '
                          '(0, 1) range'.format(test_size, n_samples))
 
     if (train_size_type == 'i' and (train_size >= n_samples or train_size <= 0)
-       or train_size_type == 'f' and (train_size <= 0 or train_size >= 1)):
+            or train_size_type == 'f' and (train_size <= 0 or train_size >= 1)):
         raise ValueError('train_size={0} should be either positive and smaller'
                          ' than the number of samples {1} or a float in the '
                          '(0, 1) range'.format(train_size, n_samples))
@@ -1909,6 +1915,7 @@ class PredefinedSplit(BaseCrossValidator):
 
 class _CVIterableWrapper(BaseCrossValidator):
     """Wrapper class for old style cv objects and iterables."""
+
     def __init__(self, cv):
         self.cv = list(cv)
 

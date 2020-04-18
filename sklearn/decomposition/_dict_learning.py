@@ -166,7 +166,7 @@ def _sparse_encode(X, dictionary, gram, cov=None, algorithm='lasso_lars',
 
     elif algorithm == 'threshold':
         new_code = ((np.sign(cov) *
-                    np.maximum(np.abs(cov) - regularization, 0)).T)
+                     np.maximum(np.abs(cov) - regularization, 0)).T)
         if positive:
             np.clip(new_code, 0, None, out=new_code)
 

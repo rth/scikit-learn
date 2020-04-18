@@ -155,9 +155,9 @@ def test_sparse_random_matrix():
         s = 1 / density
 
         A = _sparse_random_matrix(n_components,
-                                 n_features,
-                                 density=density,
-                                 random_state=0)
+                                  n_features,
+                                  density=density,
+                                  random_state=0)
         A = densify(A)
 
         # Check possible values

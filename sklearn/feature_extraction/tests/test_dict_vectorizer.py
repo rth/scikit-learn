@@ -40,7 +40,7 @@ def test_dictvectorizer(sparse, dtype, sort, iterable):
 
     if sort:
         assert (v.feature_names_ ==
-                     sorted(v.feature_names_))
+                sorted(v.feature_names_))
 
 
 def test_feature_selection():

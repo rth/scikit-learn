@@ -531,7 +531,7 @@ def check_binarized_results(y, classes, pos_label, neg_label, expected):
                                                       output_type=y_type,
                                                       classes=classes,
                                                       threshold=((neg_label +
-                                                                 pos_label) /
+                                                                  pos_label) /
                                                                  2.))
 
         assert_array_equal(toarray(inversed), toarray(y))

@@ -173,7 +173,7 @@ def test_isomap_clone_bug():
         model.set_params(n_neighbors=n_neighbors)
         model.fit(np.random.rand(50, 2))
         assert (model.nbrs_.n_neighbors ==
-                     n_neighbors)
+                n_neighbors)
 
 
 def test_sparse_input():

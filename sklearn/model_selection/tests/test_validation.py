@@ -86,6 +86,7 @@ except NameError:
 
 class MockImprovingEstimator(BaseEstimator):
     """Dummy classifier to test the learning curve"""
+
     def __init__(self, n_max_train_sizes):
         self.n_max_train_sizes = n_max_train_sizes
         self.train_sizes = 0
@@ -112,6 +113,7 @@ class MockImprovingEstimator(BaseEstimator):
 
 class MockIncrementalImprovingEstimator(MockImprovingEstimator):
     """Dummy classifier that provides partial_fit"""
+
     def __init__(self, n_max_train_sizes):
         super().__init__(n_max_train_sizes)
         self.x = None
@@ -126,6 +128,7 @@ class MockIncrementalImprovingEstimator(MockImprovingEstimator):
 
 class MockEstimatorWithParameter(BaseEstimator):
     """Dummy classifier to test the validation curve"""
+
     def __init__(self, param=0.5):
         self.X_subset = None
         self.param = param
@@ -257,7 +260,7 @@ def test_cross_val_score():
         assert_array_equal(scores, clf.score(X_sparse, multioutput_y))
 
     # test with X and y as list
-    list_check = lambda x: isinstance(x, list)
+    def list_check(x): return isinstance(x, list)
     clf = CheckingClassifier(check_X=list_check)
     scores = cross_val_score(clf, X.tolist(), y2.tolist(), cv=3)
 
@@ -523,8 +526,8 @@ def test_cross_val_score_pandas():
         # X dataframe, y series
         # 3 fold cross val is used so we need atleast 3 samples per class
         X_df, y_ser = InputFeatureType(X), TargetType(y2)
-        check_df = lambda x: isinstance(x, InputFeatureType)
-        check_series = lambda x: isinstance(x, TargetType)
+        def check_df(x): return isinstance(x, InputFeatureType)
+        def check_series(x): return isinstance(x, TargetType)
         clf = CheckingClassifier(check_X=check_df, check_y=check_series)
         cross_val_score(clf, X_df, y_ser, cv=3)
 
@@ -915,7 +918,7 @@ def test_cross_val_predict_input_types():
     assert_array_equal(predictions.shape, (150, 2))
 
     # test with X and y as list
-    list_check = lambda x: isinstance(x, list)
+    def list_check(x): return isinstance(x, list)
     clf = CheckingClassifier(check_X=list_check)
     predictions = cross_val_predict(clf, X.tolist(), y.tolist())
 
@@ -932,7 +935,7 @@ def test_cross_val_predict_input_types():
 
     # test with 3d X and
     X_3d = X[:, :, np.newaxis]
-    check_3d = lambda x: x.ndim == 3
+    def check_3d(x): return x.ndim == 3
     clf = CheckingClassifier(check_X=check_3d)
     predictions = cross_val_predict(clf, X_3d, y)
     assert_array_equal(predictions.shape, (150,))
@@ -951,8 +954,8 @@ def test_cross_val_predict_pandas():
     for TargetType, InputFeatureType in types:
         # X dataframe, y series
         X_df, y_ser = InputFeatureType(X), TargetType(y2)
-        check_df = lambda x: isinstance(x, InputFeatureType)
-        check_series = lambda x: isinstance(x, TargetType)
+        def check_df(x): return isinstance(x, InputFeatureType)
+        def check_series(x): return isinstance(x, TargetType)
         clf = CheckingClassifier(check_X=check_df, check_y=check_series)
         cross_val_predict(clf, X_df, y_ser, cv=3)
 
@@ -1185,8 +1188,8 @@ def test_learning_curve_with_shuffle():
     # Following test case was designed this way to verify the code
     # changes made in pull request: #7506.
     X = np.array([[1, 2], [3, 4], [5, 6], [7, 8], [11, 12], [13, 14], [15, 16],
-                 [17, 18], [19, 20], [7, 8], [9, 10], [11, 12], [13, 14],
-                 [15, 16], [17, 18]])
+                  [17, 18], [19, 20], [7, 8], [9, 10], [11, 12], [13, 14],
+                  [15, 16], [17, 18]])
     y = np.array([1, 1, 1, 2, 3, 4, 1, 1, 2, 3, 4, 1, 2, 3, 4])
     groups = np.array([1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 4, 4, 4, 4])
     # Splits on these groups fail without shuffle as the first iteration
@@ -1622,8 +1625,8 @@ def test_permutation_test_score_pandas():
         iris = load_iris()
         X, y = iris.data, iris.target
         X_df, y_ser = InputFeatureType(X), TargetType(y)
-        check_df = lambda x: isinstance(x, InputFeatureType)
-        check_series = lambda x: isinstance(x, TargetType)
+        def check_df(x): return isinstance(x, InputFeatureType)
+        def check_series(x): return isinstance(x, TargetType)
         clf = CheckingClassifier(check_X=check_df, check_y=check_series)
         permutation_test_score(clf, X_df, y_ser)
 

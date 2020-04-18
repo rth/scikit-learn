@@ -116,7 +116,7 @@ def test_max_features():
 
     for n_features in range(1, X_new1.shape[1] + 1):
         transformer2 = SelectFromModel(estimator=Lasso(alpha=0.025,
-                                       random_state=42),
+                                                       random_state=42),
                                        max_features=n_features,
                                        threshold=-np.inf)
         X_new2 = transformer2.fit_transform(X, y)
@@ -218,7 +218,7 @@ def test_coef_default_threshold():
 
     # For the Lasso and related models, the threshold defaults to 1e-5
     transformer = SelectFromModel(estimator=Lasso(alpha=0.1,
-                                  random_state=42))
+                                                  random_state=42))
     transformer.fit(X, y)
     X_new = transformer.transform(X)
     mask = np.abs(transformer.estimator_.coef_) > 1e-5

@@ -19,6 +19,7 @@ class TreePredictor:
     nodes : ndarray of PREDICTOR_RECORD_DTYPE
         The nodes of the tree.
     """
+
     def __init__(self, nodes):
         self.nodes = nodes
 

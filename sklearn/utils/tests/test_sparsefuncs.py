@@ -268,10 +268,10 @@ def test_mean_variance_illegal_axis():
 def test_densify_rows():
     for dtype in (np.float32, np.float64):
         X = sp.csr_matrix([[0, 3, 0],
-                        [2, 4, 0],
-                        [0, 0, 0],
-                        [9, 8, 7],
-                        [4, 0, 5]], dtype=dtype)
+                           [2, 4, 0],
+                           [0, 0, 0],
+                           [9, 8, 7],
+                           [4, 0, 5]], dtype=dtype)
         X_rows = np.array([0, 2, 3], dtype=np.intp)
         out = np.ones((6, X.shape[1]), dtype=dtype)
         out_rows = np.array([1, 3, 4], dtype=np.intp)

@@ -62,7 +62,7 @@ def test_alpha():
 
     alpha_vectors = []
     alpha_values = np.arange(2)
-    absolute_sum = lambda x: np.sum(np.abs(x))
+    def absolute_sum(x): return np.sum(np.abs(x))
 
     for alpha in alpha_values:
         mlp = MLPClassifier(hidden_layer_sizes=10, alpha=alpha, random_state=1)
@@ -224,7 +224,7 @@ def test_gradient():
             for i in range(n):
                 dtheta = E[:, i] * epsilon
                 numgrad[i] = ((loss_grad_fun(theta + dtheta)[0] -
-                              loss_grad_fun(theta - dtheta)[0]) /
+                               loss_grad_fun(theta - dtheta)[0]) /
                               (epsilon * 2.0))
             assert_almost_equal(numgrad, grad)
 
@@ -317,7 +317,7 @@ def test_learning_rate_warmstart():
             assert prev_eta == post_eta
         elif learning_rate == 'invscaling':
             assert (mlp.learning_rate_init / pow(8 + 1, mlp.power_t) ==
-                         post_eta)
+                    post_eta)
 
 
 def test_multilabel_classification():

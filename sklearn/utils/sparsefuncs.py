@@ -393,8 +393,8 @@ def _sparse_min_or_max(X, axis, min_or_max):
 
 
 def _sparse_min_max(X, axis):
-        return (_sparse_min_or_max(X, axis, np.minimum),
-                _sparse_min_or_max(X, axis, np.maximum))
+    return (_sparse_min_or_max(X, axis, np.minimum),
+            _sparse_min_or_max(X, axis, np.maximum))
 
 
 def _sparse_nan_min_max(X, axis):
@@ -481,7 +481,7 @@ def count_nonzero(X, axis=None, sample_weight=None):
         else:
             weights = np.repeat(sample_weight, np.diff(X.indptr))
             return np.bincount(X.indices, minlength=X.shape[1],
-                            weights=weights)
+                               weights=weights)
     else:
         raise ValueError('Unsupported axis: {0}'.format(axis))
 

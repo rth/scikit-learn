@@ -330,6 +330,7 @@ def test_sample_weight_kwargs():
     """Check that VotingClassifier passes sample_weight as kwargs"""
     class MockClassifier(ClassifierMixin, BaseEstimator):
         """Mock Classifier to check that sample_weight is received as kwargs"""
+
         def fit(self, X, y, *args, **sample_weight):
             assert 'sample_weight' in sample_weight
 

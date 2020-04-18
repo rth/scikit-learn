@@ -463,6 +463,7 @@ class _SigmoidCalibration(RegressorMixin, BaseEstimator):
     b_ : float
         The intercept.
     """
+
     def fit(self, X, y, sample_weight=None):
         """Fit the model using X, y as training data.
 

@@ -144,6 +144,7 @@ class _BinaryGaussianProcessClassifierLaplace(BaseEstimator):
         The log-marginal-likelihood of ``self.kernel_.theta``
 
     """
+
     def __init__(self, kernel=None, optimizer="fmin_l_bfgs_b",
                  n_restarts_optimizer=0, max_iter_predict=100,
                  warm_start=False, copy_X_train=True, random_state=None):
@@ -586,6 +587,7 @@ class GaussianProcessClassifier(ClassifierMixin, BaseEstimator):
 
     .. versionadded:: 0.18
     """
+
     def __init__(self, kernel=None, optimizer="fmin_l_bfgs_b",
                  n_restarts_optimizer=0, max_iter_predict=100,
                  warm_start=False, copy_X_train=True, random_state=None,

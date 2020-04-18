@@ -27,6 +27,7 @@ def test_delegated_docstring():
 
 class MetaEst:
     """A mock meta estimator"""
+
     def __init__(self, sub_est, better_sub_est=None):
         self.sub_est = sub_est
         self.better_sub_est = better_sub_est

@@ -134,12 +134,14 @@ class EstimatorWithoutFit:
 
 class EstimatorWithFit(BaseEstimator):
     """Dummy estimator to test scoring validators"""
+
     def fit(self, X, y):
         return self
 
 
 class EstimatorWithFitAndScore:
     """Dummy estimator to test scoring validators"""
+
     def fit(self, X, y):
         return self
 
@@ -149,6 +151,7 @@ class EstimatorWithFitAndScore:
 
 class EstimatorWithFitAndPredict:
     """Dummy estimator to test scoring validators"""
+
     def fit(self, X, y):
         self.y = y
         return self
@@ -159,6 +162,7 @@ class EstimatorWithFitAndPredict:
 
 class DummyScorer:
     """Dummy scorer that always returns 1."""
+
     def __call__(self, est, X, y):
         return 1
 
